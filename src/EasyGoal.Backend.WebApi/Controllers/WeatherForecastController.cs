@@ -1,4 +1,6 @@
+using EasyGoal.Backend.WebApi.Contracts.Responses.Common;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace EasyGoal.Backend.WebApi.Controllers;
 [ApiController]
@@ -10,22 +12,22 @@ public class WeatherForecastController : ControllerBase
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
     };
 
+    private readonly LinkGenerator _linkGenerator;
+
     private readonly ILogger<WeatherForecastController> _logger;
 
-    public WeatherForecastController(ILogger<WeatherForecastController> logger)
+    public WeatherForecastController(ILogger<WeatherForecastController> logger, LinkGenerator linkGenerator)
     {
         _logger = logger;
+        _linkGenerator = linkGenerator;
     }
 
-    [HttpGet(Name = "GetWeatherForecast")]
-    public IEnumerable<WeatherForecast> Get()
+    [HttpGet("current", Name = "GetWeatherForecast")]
+    public IActionResult Get()
     {
-        return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+        return Ok(ApiResponse<WeatherForecast>.FromResult(new WeatherForecast(DateOnly.FromDateTime(DateTime.Now.AddDays(0)), Random.Shared.Next(-20, 55), Summaries[Random.Shared.Next(Summaries.Length)])
         {
-            Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            TemperatureC = Random.Shared.Next(-20, 55),
-            Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-        })
-        .ToArray();
+            Links = [new("Name1", "GET", _linkGenerator.GetUriByName(HttpContext, "GetWeatherForecast")!)]
+        }));
     }
 }
