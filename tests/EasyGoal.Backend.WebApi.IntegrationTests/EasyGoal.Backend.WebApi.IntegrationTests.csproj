@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\EasyGoal.Backend.Domain\EasyGoal.Backend.Domain.csproj" />
+    <ProjectReference Include="..\..\src\EasyGoal.Backend.WebApi\EasyGoal.Backend.WebApi.csproj" />
   </ItemGroup>
 
   <ItemGroup>
