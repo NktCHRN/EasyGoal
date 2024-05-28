@@ -11,13 +11,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E2432691-6D7
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EasyGoal.Backend.WebApi", "src\EasyGoal.Backend.WebApi\EasyGoal.Backend.WebApi.csproj", "{30D468E1-4071-4DA9-B6E2-69789DD6649C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyGoal.Backend.Domain", "src\EasyGoal.Backend.Domain\EasyGoal.Backend.Domain.csproj", "{5764CE0D-F44B-4393-88C7-FB96F60F0114}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EasyGoal.Backend.Domain", "src\EasyGoal.Backend.Domain\EasyGoal.Backend.Domain.csproj", "{5764CE0D-F44B-4393-88C7-FB96F60F0114}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyGoal.Backend.Application", "src\EasyGoal.Backend.Application\EasyGoal.Backend.Application.csproj", "{25322290-BC12-48F5-8B6F-3D4F87FD16A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EasyGoal.Backend.Application", "src\EasyGoal.Backend.Application\EasyGoal.Backend.Application.csproj", "{25322290-BC12-48F5-8B6F-3D4F87FD16A0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyGoal.Backend.Infrastructure", "src\EasyGoal.Backend.Infrastructure\EasyGoal.Backend.Infrastructure.csproj", "{CB564D55-A0D8-4D6C-A7C0-A6DC29857DD9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EasyGoal.Backend.Infrastructure", "src\EasyGoal.Backend.Infrastructure\EasyGoal.Backend.Infrastructure.csproj", "{CB564D55-A0D8-4D6C-A7C0-A6DC29857DD9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyGoal.Backend.WebApi.IntegrationTests", "tests\EasyGoal.Backend.WebApi.IntegrationTests\EasyGoal.Backend.WebApi.IntegrationTests.csproj", "{D3318F35-0F1B-4457-B073-884517A46E22}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EasyGoal.Backend.WebApi.IntegrationTests", "tests\EasyGoal.Backend.WebApi.IntegrationTests\EasyGoal.Backend.WebApi.IntegrationTests.csproj", "{D3318F35-0F1B-4457-B073-884517A46E22}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyGoal.Backend.Infrastructure.Identity", "EasyGoal.Backend.Infrastructure.Identity\EasyGoal.Backend.Infrastructure.Identity.csproj", "{EA4ABA80-F87C-43AA-A1AE-08E312896825}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,6 +51,10 @@ Global
 		{D3318F35-0F1B-4457-B073-884517A46E22}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3318F35-0F1B-4457-B073-884517A46E22}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D3318F35-0F1B-4457-B073-884517A46E22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA4ABA80-F87C-43AA-A1AE-08E312896825}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA4ABA80-F87C-43AA-A1AE-08E312896825}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA4ABA80-F87C-43AA-A1AE-08E312896825}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA4ABA80-F87C-43AA-A1AE-08E312896825}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -60,6 +66,7 @@ Global
 		{25322290-BC12-48F5-8B6F-3D4F87FD16A0} = {E2432691-6D77-4AA5-97BB-F0519B252EFF}
 		{CB564D55-A0D8-4D6C-A7C0-A6DC29857DD9} = {E2432691-6D77-4AA5-97BB-F0519B252EFF}
 		{D3318F35-0F1B-4457-B073-884517A46E22} = {3C34D13F-4255-4ED0-A9F8-B71E6CDC57C5}
+		{EA4ABA80-F87C-43AA-A1AE-08E312896825} = {E2432691-6D77-4AA5-97BB-F0519B252EFF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {00397C2F-7273-4447-ABE1-0EBDED1FE353}

@@ -1,4 +1,4 @@
 ﻿namespace EasyGoal.Backend.Application;
-public interface IApplicationMarker
+public interface IApplicationAssemblyMarker
 {
 }

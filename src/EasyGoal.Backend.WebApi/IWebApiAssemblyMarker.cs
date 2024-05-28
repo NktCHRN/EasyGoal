@@ -1,5 +1,5 @@
 ﻿namespace EasyGoal.Backend.WebApi;
 
-public interface IWebApiMarker
+public interface IWebApiAssemblyMarker
 {
 }

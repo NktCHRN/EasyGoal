@@ -1,4 +1,4 @@
 ﻿namespace EasyGoal.Backend.Domain;
-public interface IDomainMarker
+public interface IDomainAssemblyMarker
 {
 }

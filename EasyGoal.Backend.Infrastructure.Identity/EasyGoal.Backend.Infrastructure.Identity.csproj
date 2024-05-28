@@ -7,11 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EasyGoal.Backend.Domain\EasyGoal.Backend.Domain.csproj" />
+    <ProjectReference Include="..\src\EasyGoal.Backend.Infrastructure\EasyGoal.Backend.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Abstractions\Infrastructure\" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.5" />
+	</ItemGroup>
 
 </Project>
