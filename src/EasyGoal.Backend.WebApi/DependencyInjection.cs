@@ -5,25 +5,25 @@ using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
 
-namespace EasyGoal.Backend.WebApi.Extensions;
+namespace EasyGoal.Backend.WebApi;
 
-public static class ServiceCollectionExtensions
+public static class DependencyInjection
 {
-    public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddWebApiServices(this IServiceCollection services, IConfiguration configuration)
     {
         return services;
-            //.AddOptions(configuration)
-            //.AddDatabase(configuration)
-            //.AddBlobStorage(configuration)
-            //.AddRepositories()
-            //.AddMappers()
-            //.AddValidators()
-            //.AddServices()
-            //.AddSeeders()
-            //.AddAuth(configuration)
-            //.AddApiControllers()
-            //.AddEndpointsApiExplorer()
-            //.AddSwagger();
+        //.AddOptions(configuration)
+        //.AddDatabase(configuration)
+        //.AddBlobStorage(configuration)
+        //.AddRepositories()
+        //.AddMappers()
+        //.AddValidators()
+        //.AddServices()
+        //.AddSeeders()
+        //.AddAuth(configuration)
+        //.AddApiControllers()
+        //.AddEndpointsApiExplorer()
+        //.AddSwagger();
     }
 
 
