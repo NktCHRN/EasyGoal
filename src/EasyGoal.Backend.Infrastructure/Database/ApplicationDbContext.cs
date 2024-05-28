@@ -15,7 +15,8 @@ public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetAssembly(typeof(IDomainAssemblyMarker))!);
         modelBuilder.ApplyGlobalEnumsConfiguration();
+        modelBuilder.ApplyGlobalAuditableConfiguration();
+        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetAssembly(typeof(IDomainAssemblyMarker))!);
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using EasyGoal.Backend.Domain.Abstractions.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EasyGoal.Backend.Infrastructure.Extensions;
@@ -24,6 +25,23 @@ public static class ModelBuilderExtensions
 
                     property.SetValueConverter(converter);
                 }
+            }
+        }
+
+        return modelBuilder;
+    }
+
+    public static ModelBuilder ApplyGlobalAuditableConfiguration(this ModelBuilder modelBuilder)
+    {
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+        {
+            var interfaces = entityType.ClrType.GetInterfaces();
+            if (interfaces.Any(i => i == typeof(IAuditableEntity)))
+            {
+                entityType.GetProperty(nameof(IAuditableEntity.CreatedBy))
+                    .SetMaxLength(255);
+                entityType.GetProperty(nameof(IAuditableEntity.ModifiedBy))
+                    .SetMaxLength(255);
             }
         }
 
