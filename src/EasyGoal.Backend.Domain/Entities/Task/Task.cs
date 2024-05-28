@@ -1,6 +1,6 @@
 ﻿using EasyGoal.Backend.Domain.Abstractions.Entities;
 
-namespace EasyGoal.Backend.Domain.Entities;
+namespace EasyGoal.Backend.Domain.Entities.Task;
 public class Task : BaseAuditableEntity
 {
     public DateTimeOffset? StartTime { get; private set; }

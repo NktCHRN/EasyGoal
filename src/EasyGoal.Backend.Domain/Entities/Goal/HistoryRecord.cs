@@ -1,6 +1,6 @@
 ﻿using EasyGoal.Backend.Domain.Abstractions.Entities;
 
-namespace EasyGoal.Backend.Domain.Entities;
+namespace EasyGoal.Backend.Domain.Entities.Goal;
 public class HistoryRecord : BaseEntity
 {
     public DateOnly Date { get; private set; }
