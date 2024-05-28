@@ -1,5 +1,6 @@
 ﻿using EasyGoal.Backend.Domain.Abstractions.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EasyGoal.Backend.Infrastructure.Extensions;
@@ -13,22 +14,26 @@ public static class ModelBuilderExtensions
             {
                 if (property.ClrType.IsEnum)
                 {
-                    var type = typeof(EnumToStringConverter<>).MakeGenericType(property.ClrType);
-                    var converter = Activator.CreateInstance(type, new ConverterMappingHints()) as ValueConverter;
-
-                    property.SetValueConverter(converter);
+                    var enumType = property.ClrType;
+                    ApplyEnumConfigurationOnProperty(property, enumType);
                 }
                 else if (Nullable.GetUnderlyingType(property.ClrType)?.IsEnum is true)
                 {
-                    var type = typeof(EnumToStringConverter<>).MakeGenericType(Nullable.GetUnderlyingType(property.ClrType)!);
-                    var converter = Activator.CreateInstance(type, new ConverterMappingHints()) as ValueConverter;
-
-                    property.SetValueConverter(converter);
+                    var enumType = Nullable.GetUnderlyingType(property.ClrType)!;
+                    ApplyEnumConfigurationOnProperty(property, enumType);
                 }
             }
         }
 
         return modelBuilder;
+    }
+
+    private static void ApplyEnumConfigurationOnProperty(IMutableProperty enumProperty, Type enumType)
+    {
+        var converterType = typeof(EnumToStringConverter<>).MakeGenericType(enumType);
+        var converter = Activator.CreateInstance(converterType, new ConverterMappingHints()) as ValueConverter;
+        enumProperty.SetValueConverter(converter);
+        enumProperty.SetMaxLength(128);
     }
 
     public static ModelBuilder ApplyGlobalAuditableConfiguration(this ModelBuilder modelBuilder)
@@ -39,9 +44,9 @@ public static class ModelBuilderExtensions
             if (interfaces.Any(i => i == typeof(IAuditableEntity)))
             {
                 entityType.GetProperty(nameof(IAuditableEntity.CreatedBy))
-                    .SetMaxLength(255);
+                    .SetMaxLength(256);
                 entityType.GetProperty(nameof(IAuditableEntity.ModifiedBy))
-                    .SetMaxLength(255);
+                    .SetMaxLength(256);
             }
         }
 
