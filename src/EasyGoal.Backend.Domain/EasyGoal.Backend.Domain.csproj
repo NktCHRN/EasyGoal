@@ -7,7 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentResults" Version="3.15.2" />
+    <Folder Include="DomainEvents\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR.Contracts" Version="2.0.1" />
   </ItemGroup>
 
 </Project>

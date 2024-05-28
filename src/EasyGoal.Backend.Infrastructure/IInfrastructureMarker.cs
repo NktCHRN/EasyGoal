@@ -1,6 +1,4 @@
 ﻿namespace EasyGoal.Backend.Infrastructure;
-
-public class Class1
+public interface IInfrastructureMarker
 {
-
 }

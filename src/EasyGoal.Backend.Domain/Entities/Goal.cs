@@ -1,7 +1,7 @@
-﻿namespace EasyGoal.Backend.Domain.Entities;
-public class Goal
+﻿using EasyGoal.Backend.Domain.Abstractions.Entities;
+
+namespace EasyGoal.Backend.Domain.Entities;
+public class Goal : BaseAuditableEntity
 {
     public Guid UserId { get; set; }
-    public IReadOnlyList<SwotPoint> SwotPoints => _swotPoints.AsReadOnly();
-    private readonly List<SwotPoint> _swotPoints = [];
 }
