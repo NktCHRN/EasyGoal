@@ -47,4 +47,6 @@ public static class ModelBuilderExtensions
 
         return modelBuilder;
     }
+
+    // TODO: Add SoftDelete Global query filter!!!
 }
