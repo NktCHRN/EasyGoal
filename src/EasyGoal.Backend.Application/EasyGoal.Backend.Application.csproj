@@ -10,8 +10,4 @@
     <ProjectReference Include="..\EasyGoal.Backend.Domain\EasyGoal.Backend.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Abstractions\Infrastructure\" />
-  </ItemGroup>
-
 </Project>
