@@ -1,6 +1,6 @@
 ﻿using EasyGoal.Backend.Domain.Abstractions.Entities;
 
-namespace EasyGoal.Backend.Infrastructure.Identity.Entities;
+namespace EasyGoal.Backend.Infrastructure.Identity;
 public class RefreshToken : BaseAuditableEntity
 {
     public string Token { get; set; } = string.Empty;

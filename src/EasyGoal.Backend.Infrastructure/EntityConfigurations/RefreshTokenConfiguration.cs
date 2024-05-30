@@ -1,8 +1,8 @@
-﻿using EasyGoal.Backend.Infrastructure.Identity.Entities;
+﻿using EasyGoal.Backend.Infrastructure.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace EasyGoal.Backend.Infrastructure.Identity.EntityConfigurations;
+namespace EasyGoal.Backend.Infrastructure.EntityConfigurations;
 public sealed class RefreshTokenConfiguration : IEntityTypeConfiguration<RefreshToken>
 {
     public void Configure(EntityTypeBuilder<RefreshToken> builder)

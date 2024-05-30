@@ -1,4 +1,4 @@
-﻿using EasyGoal.Backend.Domain.Entities.User;
+﻿using EasyGoal.Backend.Domain.Entities.UserAttributes;
 using EasyGoal.Backend.Infrastructure.Database;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;

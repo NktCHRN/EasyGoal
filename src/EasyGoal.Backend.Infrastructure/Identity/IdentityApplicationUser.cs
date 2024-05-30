@@ -1,7 +1,7 @@
 ﻿using EasyGoal.Backend.Domain.Abstractions.Entities;
 using Microsoft.AspNetCore.Identity;
 
-namespace EasyGoal.Backend.Infrastructure.Identity.Entities;
+namespace EasyGoal.Backend.Infrastructure.Identity;
 public class IdentityApplicationUser : IdentityUser<Guid>, IAuditableEntity, ISoftDeleteEntity
 {
     public string Name { get; set; } = string.Empty;
