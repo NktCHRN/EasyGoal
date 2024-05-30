@@ -1,9 +1,5 @@
-﻿using EasyGoal.Backend.Domain.Entities.UserAttributes;
-using EasyGoal.Backend.Infrastructure.Database;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Options;
-using Microsoft.OpenApi.Models;
-using System.Text.Json.Serialization;
+﻿using EasyGoal.Backend.WebApi.OutboundParameterTransformers;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 
 namespace EasyGoal.Backend.WebApi;
 
@@ -11,6 +7,17 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddWebApiServices(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddHttpContextAccessor();
+
+        services.AddControllers(options =>
+            {
+                options.Conventions.Add(new RouteTokenTransformerConvention(new SlugifyParameterTransformer()));
+            });
+
+        services.AddEndpointsApiExplorer();
+
+        services.AddSwaggerGen();
+
         return services;
         //.AddOptions(configuration)
         //.AddDatabase(configuration)
