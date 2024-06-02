@@ -35,7 +35,9 @@ public static class DependencyInjection
                 cfg.AddJob<ProcessOutboxMessagesJob>(jobKey)
                     .AddTrigger(t => t
                         .ForJob(nameof(ProcessOutboxMessagesJob))
-                        .WithSimpleSchedule(s => s.WithIntervalInSeconds(configuration.GetValue<int>($"OutboxOptions:{nameof(OutboxOptions.IntervalInSeconds)}"))));
+                        .WithSimpleSchedule(s => s
+                            .WithIntervalInSeconds(configuration.GetValue<int>($"OutboxOptions:{nameof(OutboxOptions.IntervalInSeconds)}"))
+                            .RepeatForever()));
             });
     }
 }
