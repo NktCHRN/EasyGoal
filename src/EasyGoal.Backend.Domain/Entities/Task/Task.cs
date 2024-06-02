@@ -12,5 +12,5 @@ public class Task : BaseAuditableEntity
 
     public Guid? TaskSeriesId { get; private set; }
 
-    public SynchronisationStatus IsSynchonisedWithGoogle {  get; set; }
+    public SynchronisationStatus? IsSynchonisedWithGoogle {  get; set; }
 }

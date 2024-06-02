@@ -1,12 +1,15 @@
 ﻿namespace EasyGoal.Backend.WebApi.Contracts.Responses.Common;
 
-public record ApiResponse<T> where T : BaseModelResponse
+public record ApiResponse<T>
 {
-    public T? Data { get; protected init; }
+    public T? Data { get; init; }
 
-    public ErrorResponse? Error { get; protected init; }
+    public ErrorResponse? Error { get; init; }
+}
 
-    public static ApiResponse<TResponse> FromResult<TResponse>(TResponse data) where TResponse : BaseModelResponse
+public static class ApiResponse
+{
+    public static ApiResponse<TResponse> FromResult<TResponse>(TResponse data)
     {
         return new ApiResponse<TResponse>
         {
@@ -14,9 +17,9 @@ public record ApiResponse<T> where T : BaseModelResponse
         };
     }
 
-    public static ApiResponse<TResponse> FromError<TResponse>(ErrorResponse error) where TResponse : BaseModelResponse
+    public static ApiResponse<object> FromError(ErrorResponse error)
     {
-        return new ApiResponse<TResponse>
+        return new ApiResponse<object>
         {
             Error = error
         };

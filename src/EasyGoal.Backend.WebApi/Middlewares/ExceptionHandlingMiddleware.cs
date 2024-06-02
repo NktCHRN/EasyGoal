@@ -38,7 +38,7 @@ public sealed class ExceptionHandlingMiddleware
 
             httpContext.Response.ContentType = "application/json";
             httpContext.Response.StatusCode = (int)statusCode;
-            await httpContext.Response.WriteAsJsonAsync(ApiResponse<BaseModelResponse>.FromError<BaseModelResponse>(new ErrorResponse(message)));
+            await httpContext.Response.WriteAsJsonAsync(ApiResponse.FromError(new ErrorResponse(message)));
         }
     }
 }
