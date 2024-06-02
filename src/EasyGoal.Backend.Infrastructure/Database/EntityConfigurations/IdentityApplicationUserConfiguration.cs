@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace EasyGoal.Backend.Infrastructure.Database.EntityConfigurations;
-public sealed class IdentityApplicationUserConfiguration : IEntityTypeConfiguration<IdentityApplicationUser>
+public sealed class IdentityApplicationUserConfiguration : IEntityTypeConfiguration<IdentityUser>
 {
-    public void Configure(EntityTypeBuilder<IdentityApplicationUser> builder)
+    public void Configure(EntityTypeBuilder<IdentityUser> builder)
     {
         builder.Property(e => e.Name)
             .HasMaxLength(256);

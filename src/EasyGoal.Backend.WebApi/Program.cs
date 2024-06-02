@@ -1,5 +1,6 @@
 using EasyGoal.Backend.Infrastructure;
 using EasyGoal.Backend.WebApi;
+using EasyGoal.Backend.WebApi.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.MapControllers();
 

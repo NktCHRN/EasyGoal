@@ -1,6 +1,28 @@
-﻿namespace EasyGoal.Backend.Domain.Abstractions.Entities;
+﻿using EasyGoal.Backend.Domain.Abstractions.DomainEvents;
+using MassTransit;
+
+namespace EasyGoal.Backend.Domain.Abstractions.Entities;
 public abstract class BaseEntity : ISoftDeletableEntity
 {
-    public Guid Id { get; protected set; }
+    public Guid Id { get; protected set; } = NewId.NextSequentialGuid();
     public bool IsDeleted { get; set; }
+
+    private readonly List<BaseEvent> _domainEvents = [];
+
+    public IReadOnlyCollection<BaseEvent> DomainEvents => _domainEvents.AsReadOnly();
+
+    public void AddDomainEvent(BaseEvent domainEvent)
+    {
+        _domainEvents.Add(domainEvent);
+    }
+
+    public void RemoveDomainEvent(BaseEvent domainEvent)
+    {
+        _domainEvents.Remove(domainEvent);
+    }
+
+    public void ClearDomainEvents()
+    {
+        _domainEvents.Clear();
+    }
 }

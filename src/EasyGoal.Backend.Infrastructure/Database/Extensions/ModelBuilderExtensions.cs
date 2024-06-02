@@ -8,6 +8,17 @@ using System.Linq.Expressions;
 namespace EasyGoal.Backend.Infrastructure.Database.Extensions;
 public static class ModelBuilderExtensions
 {
+    public static ModelBuilder ApplyGlobalBaseEntityConfiguration(this ModelBuilder modelBuilder)
+    {
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes()
+            .Where(e => e.ClrType.IsAssignableTo(typeof(BaseEntity))))
+        {
+            entityType.AddIgnored(nameof(BaseEntity.DomainEvents));
+        }
+
+        return modelBuilder;
+    }
+
     public static ModelBuilder ApplyGlobalEnumsConfiguration(this ModelBuilder modelBuilder)
     {
         foreach (var entityType in modelBuilder.Model.GetEntityTypes())
@@ -55,7 +66,7 @@ public static class ModelBuilderExtensions
     public static ModelBuilder ApplyGlobalQueryFilter<TEntity>(this ModelBuilder modelBuilder, Expression<Func<TEntity, bool>> filterExpr)
     {
         foreach (var entityType in modelBuilder.Model.GetEntityTypes()
-            .Where(e => e.ClrType.IsAssignableTo(typeof(TEntity))))
+            .Where(e => e.ClrType.IsAssignableTo(typeof(TEntity)) && e.BaseType is null))
         {
             var parameter = Expression.Parameter(entityType.ClrType);
             var filterBody = ReplacingExpressionVisitor.Replace(filterExpr.Parameters.First(), parameter, filterExpr.Body);

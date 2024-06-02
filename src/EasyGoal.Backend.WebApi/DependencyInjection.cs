@@ -2,6 +2,7 @@
 using EasyGoal.Backend.WebApi.OutboundParameterTransformers;
 using EasyGoal.Backend.WebApi.Utilities;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using System.Text.Json.Serialization;
 
 namespace EasyGoal.Backend.WebApi;
 
@@ -16,7 +17,8 @@ public static class DependencyInjection
         services.AddControllers(options =>
             {
                 options.Conventions.Add(new RouteTokenTransformerConvention(new SlugifyParameterTransformer()));
-            });
+            })
+            .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
         services.AddEndpointsApiExplorer();
 
