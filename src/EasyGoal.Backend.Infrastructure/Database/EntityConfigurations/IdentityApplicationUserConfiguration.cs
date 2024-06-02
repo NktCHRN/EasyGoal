@@ -9,8 +9,5 @@ public sealed class IdentityApplicationUserConfiguration : IEntityTypeConfigurat
     {
         builder.Property(e => e.Name)
             .HasMaxLength(256);
-
-        builder.Property(e => e.AvatarLocalFileName)
-            .HasMaxLength(128);
     }
 }
