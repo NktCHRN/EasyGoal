@@ -1,4 +1,5 @@
 ﻿using EasyGoal.Backend.Application.Abstractions.Infrastructure.Identity;
+using EasyGoal.Backend.Infrastructure.Database;
 using EasyGoal.Backend.Infrastructure.Database.Interceptors;
 using EasyGoal.Backend.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -17,7 +18,7 @@ public static class DependencyInjection
             .AddSingleton<SoftDeleteInterceptor>()
             .AddSingleton<AuditableInterceptor>()
             .AddSingleton<DispatchDomainEventsInterceptor>()
-            .AddDbContext<IdentityDbContext>((sp, options)
+            .AddDbContext<ApplicationDbContext>((sp, options)
                 => options
                     .UseNpgsql(configuration.GetConnectionString("ApplicationDbConnection"))
                     .AddInterceptors(sp.GetRequiredService<SoftDeleteInterceptor>(), sp.GetRequiredService<AuditableInterceptor>(), sp.GetRequiredService<DispatchDomainEventsInterceptor>()))

@@ -13,7 +13,7 @@ public static class ModelBuilderExtensions
         foreach (var entityType in modelBuilder.Model.GetEntityTypes()
             .Where(e => e.ClrType.IsAssignableTo(typeof(BaseEntity))))
         {
-            entityType.AddIgnored(nameof(BaseEntity.DomainEvents));
+            modelBuilder.Entity(entityType.ClrType).Ignore(nameof(BaseEntity.DomainEvents));
         }
 
         return modelBuilder;

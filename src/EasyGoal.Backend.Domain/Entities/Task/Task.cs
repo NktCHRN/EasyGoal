@@ -13,8 +13,8 @@ public class Task : BaseAuditableEntity
     public Enums.TaskStatus Status { get; private set; }
     public SynchronisationStatus? IsSynchonisedWithGoogle { get; set; }
 
-    public Guid? TaskSeriesId { get; private set; }
-    public TaskSeries.TaskSeries? TaskSeries { get; private set; }
+    //public Guid? TaskSeriesId { get; private set; }
+    //public TaskSeries.TaskSeries? TaskSeries { get; private set; }
     public IReadOnlyList<SubTask> SubTasks => _subTasks.AsReadOnly();
     private readonly List<SubTask> _subTasks = [];
 }
