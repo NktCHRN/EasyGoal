@@ -1,9 +1,11 @@
 ﻿using EasyGoal.Backend.Domain.Abstractions.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using System.Linq.Expressions;
 
-namespace EasyGoal.Backend.Infrastructure.Extensions;
+namespace EasyGoal.Backend.Infrastructure.Database.Extensions;
 public static class ModelBuilderExtensions
 {
     public static ModelBuilder ApplyGlobalEnumsConfiguration(this ModelBuilder modelBuilder)
@@ -38,20 +40,37 @@ public static class ModelBuilderExtensions
 
     public static ModelBuilder ApplyGlobalAuditableConfiguration(this ModelBuilder modelBuilder)
     {
-        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes()
+            .Where(e => e.ClrType.IsAssignableTo(typeof(IAuditableEntity))))
         {
-            var interfaces = entityType.ClrType.GetInterfaces();
-            if (interfaces.Any(i => i == typeof(IAuditableEntity)))
-            {
-                entityType.GetProperty(nameof(IAuditableEntity.CreatedBy))
-                    .SetMaxLength(256);
-                entityType.GetProperty(nameof(IAuditableEntity.ModifiedBy))
-                    .SetMaxLength(256);
-            }
+            entityType.GetProperty(nameof(IAuditableEntity.CreatedBy))
+                .SetMaxLength(256);
+            entityType.GetProperty(nameof(IAuditableEntity.ModifiedBy))
+                .SetMaxLength(256);
         }
 
         return modelBuilder;
     }
 
-    // TODO: Add SoftDelete Global query filter!!!
+    public static ModelBuilder ApplyGlobalQueryFilter<TEntity>(this ModelBuilder modelBuilder, Expression<Func<TEntity, bool>> filterExpr)
+    {
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes()
+            .Where(e => e.ClrType.IsAssignableTo(typeof(TEntity))))
+        {
+            var parameter = Expression.Parameter(entityType.ClrType);
+            var filterBody = ReplacingExpressionVisitor.Replace(filterExpr.Parameters.First(), parameter, filterExpr.Body);
+
+            var currentQueryFilter = entityType.GetQueryFilter();
+            if (currentQueryFilter is not null)
+            {
+                filterBody = Expression.AndAlso(
+                    ReplacingExpressionVisitor.Replace(currentQueryFilter.Parameters.First(), parameter, currentQueryFilter.Body),
+                    filterBody);
+            }
+
+            entityType.SetQueryFilter(Expression.Lambda(filterBody, parameter));
+        }
+
+        return modelBuilder;
+    }
 }

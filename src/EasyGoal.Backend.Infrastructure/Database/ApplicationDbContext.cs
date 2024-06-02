@@ -1,4 +1,5 @@
-﻿using EasyGoal.Backend.Infrastructure.Extensions;
+﻿using EasyGoal.Backend.Domain.Abstractions.Entities;
+using EasyGoal.Backend.Infrastructure.Database.Extensions;
 using EasyGoal.Backend.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -18,6 +19,7 @@ public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> 
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyGlobalEnumsConfiguration();
         modelBuilder.ApplyGlobalAuditableConfiguration();
+        modelBuilder.ApplyGlobalQueryFilter<ISoftDeletableEntity>(s => !s.IsDeleted);
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetAssembly(typeof(IInfrastructureAssemblyMarker))!);
     }
 }

@@ -1,5 +1,5 @@
 ﻿namespace EasyGoal.Backend.Domain.Abstractions.Entities;
-public interface ISoftDeleteEntity
+public interface ISoftDeletableEntity
 {
     bool IsDeleted { get; set; }
 }

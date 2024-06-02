@@ -1,4 +1,6 @@
-﻿using EasyGoal.Backend.WebApi.OutboundParameterTransformers;
+﻿using EasyGoal.Backend.Application.Abstractions.Presentation;
+using EasyGoal.Backend.WebApi.OutboundParameterTransformers;
+using EasyGoal.Backend.WebApi.Utilities;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 
 namespace EasyGoal.Backend.WebApi;
@@ -8,6 +10,8 @@ public static class DependencyInjection
     public static IServiceCollection AddWebApiServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddHttpContextAccessor();
+
+        services.AddSingleton<ICurrentApplicationUser, CurrentWebApiUser>();
 
         services.AddControllers(options =>
             {

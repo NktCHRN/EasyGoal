@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 
 namespace EasyGoal.Backend.Infrastructure.Identity;
-public class IdentityApplicationUser : IdentityUser<Guid>, IAuditableEntity, ISoftDeleteEntity
+public class IdentityApplicationUser : IdentityUser<Guid>, IAuditableEntity, ISoftDeletableEntity
 {
     public string Name { get; set; } = string.Empty;
     public string? AvatarLocalFileName { get; set; }
