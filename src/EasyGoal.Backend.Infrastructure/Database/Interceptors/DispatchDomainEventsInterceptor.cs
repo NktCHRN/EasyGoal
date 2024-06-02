@@ -1,39 +1,34 @@
 ﻿using EasyGoal.Backend.Domain.Abstractions.DomainEvents;
 using EasyGoal.Backend.Domain.Abstractions.Entities;
-using EasyGoal.Backend.Infrastructure.Database.SystemEntities;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.Extensions.Options;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace EasyGoal.Backend.Infrastructure.Database.Interceptors;
-public sealed class SaveDomainEventsInterceptor : SaveChangesInterceptor
+public sealed class DispatchDomainEventsInterceptor : SaveChangesInterceptor
 {
-    private readonly TimeProvider _dateTimeProvider;
-    private readonly JsonSerializerOptions _jsonSerializerOptions;
+    private readonly IPublisher _publisher;
 
-    public SaveDomainEventsInterceptor(TimeProvider dateTimeProvider, IOptions<JsonSerializerOptions> jsonSerializerOptions)
+    public DispatchDomainEventsInterceptor(IPublisher publisher)
     {
-        _dateTimeProvider = dateTimeProvider;
-        _jsonSerializerOptions = jsonSerializerOptions.Value;
+        _publisher = publisher;
     }
 
     public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
     {
-        SaveDomainEventsAsync(eventData.Context).GetAwaiter().GetResult();
+        DispatchDomainEventsAsync(eventData.Context).GetAwaiter().GetResult();
 
         return base.SavingChanges(eventData, result);
     }
 
     public override async ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result, CancellationToken cancellationToken = default)
     {
-        await SaveDomainEventsAsync(eventData.Context);
+        await DispatchDomainEventsAsync(eventData.Context);
 
         return await base.SavingChangesAsync(eventData, result, cancellationToken);
     }
 
-    public async Task SaveDomainEventsAsync(DbContext? dbContext)
+    public async Task DispatchDomainEventsAsync(DbContext? dbContext)
     {
         if (dbContext is null)
         {
@@ -49,13 +44,7 @@ public sealed class SaveDomainEventsInterceptor : SaveChangesInterceptor
 
         foreach (var domainEvent in domainEvents)
         {
-            await dbContext.AddAsync(new OutboxMessage
-            {
-                Type = domainEvent.GetType().FullName!,
-                Status = OutboxMessageStatus.Created,
-                OccuredOn = _dateTimeProvider.GetUtcNow(),
-                Content = JsonSerializer.Serialize(domainEvent, _jsonSerializerOptions)
-            });
+            await _publisher.Publish(domainEvent);
         }
     }
 }
