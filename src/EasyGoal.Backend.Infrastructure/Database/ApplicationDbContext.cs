@@ -1,12 +1,16 @@
 ﻿using EasyGoal.Backend.Domain.Abstractions.Entities;
+using EasyGoal.Backend.Domain.Entities.Common;
 using EasyGoal.Backend.Infrastructure.Database.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace EasyGoal.Backend.Infrastructure.Database;
-public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<Identity.IdentityUser, IdentityRole<Guid>, Guid>(options)
+public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<Identity.IdentityApplicationUser, IdentityRole<Guid>, Guid>(options)
 {
+    public DbSet<FileAttachment> FileAttachments => Set<FileAttachment>();
+    public DbSet<Domain.Entities.Task.Task> Tasks => Set<Domain.Entities.Task.Task>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

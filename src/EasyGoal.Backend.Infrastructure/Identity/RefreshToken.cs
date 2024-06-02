@@ -8,5 +8,5 @@ public class RefreshToken : BaseAuditableEntity
     public DateTimeOffset ExpiryTime { get; set; }
 
     public Guid UserId { get; set; }
-    public IdentityUser User { get; set; } = null!;
+    public IdentityApplicationUser User { get; set; } = null!;
 }
