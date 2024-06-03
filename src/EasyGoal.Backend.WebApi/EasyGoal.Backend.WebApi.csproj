@@ -19,8 +19,4 @@
     <ProjectReference Include="..\EasyGoal.Backend.Infrastructure\EasyGoal.Backend.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Contracts\Requests\" />
-  </ItemGroup>
-
 </Project>

@@ -24,7 +24,7 @@ public sealed class UserService : IUserService
 
         var user = new IdentityApplicationUser
         {
-            Name = name,
+            Name = name.Trim(),
             Email = email,
             UserName = email,
             UserCategories = CreateDefaultCategories()
