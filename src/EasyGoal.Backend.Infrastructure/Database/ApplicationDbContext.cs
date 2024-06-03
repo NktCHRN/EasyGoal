@@ -1,6 +1,7 @@
 ﻿using EasyGoal.Backend.Domain.Abstractions.Entities;
 using EasyGoal.Backend.Domain.Entities.Common;
 using EasyGoal.Backend.Domain.Entities.Goal;
+using EasyGoal.Backend.Domain.Entities.UserAttributes;
 using EasyGoal.Backend.Infrastructure.Database.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -13,6 +14,8 @@ public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> 
     public DbSet<Domain.Entities.Task.Task> Tasks => Set<Domain.Entities.Task.Task>();
 
     public DbSet<Goal> Goals => Set<Goal>();
+
+    public DbSet<Category> Categories => Set<Category>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
