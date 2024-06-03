@@ -1,27 +1,19 @@
 ﻿namespace EasyGoal.Backend.WebApi.Contracts.Responses.Common;
 
-public record ApiResponse<T>
+public record ApiResponse<T>(T? Data, ErrorResponse? Error)
 {
-    public T? Data { get; init; }
-
-    public ErrorResponse? Error { get; init; }
+    public bool IsSuccessful => Error is null;
 }
 
 public static class ApiResponse
 {
     public static ApiResponse<TResponse> FromResult<TResponse>(TResponse data)
     {
-        return new ApiResponse<TResponse>
-        {
-            Data = data
-        };
+        return new ApiResponse<TResponse>(data, null);
     }
 
-    public static ApiResponse<object> FromError(ErrorResponse error)
+    public static ApiResponse<object?> FromError(ErrorResponse error)
     {
-        return new ApiResponse<object>
-        {
-            Error = error
-        };
+        return new ApiResponse<object?>(null, error);
     }
 }

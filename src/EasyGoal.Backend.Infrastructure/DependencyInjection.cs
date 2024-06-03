@@ -1,4 +1,5 @@
 ﻿using EasyGoal.Backend.Application.Abstractions.Infrastructure.Identity;
+using EasyGoal.Backend.Infrastructure.Abstractions;
 using EasyGoal.Backend.Infrastructure.Database;
 using EasyGoal.Backend.Infrastructure.Database.Interceptors;
 using EasyGoal.Backend.Infrastructure.Identity;
@@ -15,13 +16,12 @@ public static class DependencyInjection
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
         return services.AddDatabase(configuration)
-            .AddIdentityServices()
-            .AddScoped<IUserService, UserService>()
+            .AddIdentityServices(configuration)
             .AddSingleton(TimeProvider.System)
             .Configure((Action<JsonSerializerOptions>)(opt => opt.Converters.Add(new JsonStringEnumConverter())));
     }
 
-    private static IServiceCollection AddIdentityServices(this IServiceCollection services)
+    private static IServiceCollection AddIdentityServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddIdentity<IdentityApplicationUser, IdentityRole<Guid>>(options =>
         {
@@ -34,6 +34,11 @@ public static class DependencyInjection
         })
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
+
+        services.Configure<JwtBearerConfigOptions>(configuration.GetRequiredSection("JwtBearer"));
+        services.AddSingleton<IJwtTokenProvider, JwtTokenProvider>();
+        services.Configure<TokenProvidersOptions>(configuration.GetRequiredSection("TokenProvidersOptions"));
+        services.AddScoped<IUserService, UserService>();
 
         return services;
     }

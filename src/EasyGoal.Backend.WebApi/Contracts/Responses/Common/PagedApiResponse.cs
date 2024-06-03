@@ -1,18 +1,13 @@
 ﻿namespace EasyGoal.Backend.WebApi.Contracts.Responses.Common;
 
-public sealed record PagedApiResponse<T> : ApiResponse<IEnumerable<T>>
+public sealed record PagedApiResponse<T>(IEnumerable<T>? Data, PaginationParametersResponse? PaginationParameters, ErrorResponse? Error) : ApiResponse<IEnumerable<T>>(Data, Error)
 {
-    public PaginationParametersResponse? PaginationParameters { get; init; }
 }
 
 public static class PagedApiResponse
 {
     public static PagedApiResponse<TResponse> FromResult<TResponse>(IEnumerable<TResponse> data, PaginationParametersResponse paginationParameters)
     {
-        return new PagedApiResponse<TResponse>
-        {
-            Data = data,
-            PaginationParameters = paginationParameters
-        };
+        return new PagedApiResponse<TResponse>(data, paginationParameters, null);
     }
 }

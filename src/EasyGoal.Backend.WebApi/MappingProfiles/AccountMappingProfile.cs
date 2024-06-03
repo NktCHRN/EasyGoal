@@ -12,5 +12,8 @@ public sealed class AccountMappingProfile : Profile
     {
         CreateMap<RegisterAccountRequest, RegisterAccountCommand>();
         CreateMap<AccountDto, AccountRegisteredResponse>();
+
+        CreateMap<LoginRequest, LoginCommand>();
+        CreateMap<LoginResultDto, LoginResponse>();
     }
 }
