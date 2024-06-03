@@ -3,6 +3,7 @@ using EasyGoal.Backend.Application.Extensions;
 using EasyGoal.Backend.Application.Features.Account.Dto;
 using EasyGoal.Backend.Domain.Entities.UserAttributes;
 using EasyGoal.Backend.Infrastructure.Abstractions;
+using EasyGoal.Backend.Infrastructure.Database;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using System.Drawing;
@@ -15,13 +16,15 @@ public sealed class UserService : IUserService
     private readonly IJwtTokenProvider _jwtTokenProvider;
     private readonly TimeProvider _timeProvider;
     private readonly TokenProvidersOptions _tokenProvidersOptions;
+    private readonly ApplicationDbContext _applicationDbContext;
 
-    public UserService(UserManager<IdentityApplicationUser> userManager, IJwtTokenProvider jwtTokenProvider, TimeProvider timeProvider, IOptions<TokenProvidersOptions> tokenProvidersOptions)
+    public UserService(UserManager<IdentityApplicationUser> userManager, IJwtTokenProvider jwtTokenProvider, TimeProvider timeProvider, IOptions<TokenProvidersOptions> tokenProvidersOptions, ApplicationDbContext applicationDbContext)
     {
         _userManager = userManager;
         _jwtTokenProvider = jwtTokenProvider;
         _timeProvider = timeProvider;
         _tokenProvidersOptions = tokenProvidersOptions.Value;
+        _applicationDbContext = applicationDbContext;
     }
 
     public async Task<AccountDto> RegisterAsync(string email, string name, string password)
@@ -72,12 +75,15 @@ public sealed class UserService : IUserService
         }
 
         var refreshToken = _jwtTokenProvider.GenerateRefreshToken();
-        user.RefreshTokens.Add(new RefreshToken
+        _applicationDbContext.Add(new RefreshToken
         {
             Token = refreshToken,
-            UserId = user!.Id,
+            UserId = user.Id,
             ExpiryTime = _timeProvider.GetUtcNow().AddDays(_tokenProvidersOptions.RefreshTokenLifetimeInDays)
         });
+
+        await _applicationDbContext.SaveChangesAsync();
+
         return new LoginResultDto()
         {
             AccessToken = _jwtTokenProvider.GenerateAccessToken(GetClaims(user!)),
