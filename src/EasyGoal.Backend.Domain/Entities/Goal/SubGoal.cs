@@ -1,5 +1,5 @@
 ﻿using EasyGoal.Backend.Domain.Abstractions.Entities;
-using EasyGoal.Backend.Domain.Entities.TaskSeries;
+using EasyGoal.Backend.Domain.Enums;
 
 namespace EasyGoal.Backend.Domain.Entities.Goal;
 public class SubGoal : BaseAuditableEntity

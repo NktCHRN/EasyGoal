@@ -1,4 +1,4 @@
-﻿namespace EasyGoal.Backend.Domain.Entities.TaskSeries;
+﻿namespace EasyGoal.Backend.Domain.Entities.Task.TaskSeries;
 public class DailyTaskSeries : TaskSeries
 {
     public DateOnly StartDate { get; private set; }

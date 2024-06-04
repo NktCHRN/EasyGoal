@@ -1,4 +1,4 @@
-﻿namespace EasyGoal.Backend.Domain.Entities.TaskSeries;
+﻿namespace EasyGoal.Backend.Domain.Enums;
 public enum TaskCompletionType
 {
     Sequential,
