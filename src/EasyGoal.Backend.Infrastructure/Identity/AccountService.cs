@@ -49,7 +49,8 @@ public sealed class AccountService : IAccountService
             Name = name.Trim(),
             Email = email,
             UserName = email,
-            UserCategories = CreateDefaultCategories()
+            UserCategories = CreateDefaultCategories(),
+            DecisionHelperCriteria = DecisionHelperCriterion.DefaultCriteria
         };
 
         var userCreationResults = await _userManager.CreateAsync(user, password);

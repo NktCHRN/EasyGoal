@@ -14,4 +14,5 @@ public class IdentityApplicationUser : IdentityUser<Guid>, IAuditableEntity, ISo
 
     public IList<RefreshToken> RefreshTokens { get; set; } = [];
     public IList<Category> UserCategories { get; set; } = [];
+    public IList<DecisionHelperCriterion> DecisionHelperCriteria { get; set; } = [];
 }

@@ -10,7 +10,7 @@ public class Task : BaseAuditableEntity
     public DateTimeOffset? EndTime { get; private set; }
     public string? Notes { get; private set; }
 
-    public Enums.TaskStatus Status { get; private set; }
+    public bool IsDone { get; private set; }
     public SynchronisationStatus? IsSynchonisedWithGoogle { get; set; }
 
     //public Guid? TaskSeriesId { get; private set; }

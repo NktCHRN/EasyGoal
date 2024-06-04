@@ -20,6 +20,8 @@ public sealed class ApplicationDbContext : IdentityDbContext<IdentityApplication
 
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
 
+    public DbSet<DecisionHelperCriterion> DecisionHelperCriteria => Set<DecisionHelperCriterion>();
+
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
     }
