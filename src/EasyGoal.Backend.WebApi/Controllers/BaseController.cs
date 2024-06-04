@@ -14,11 +14,6 @@ public abstract class BaseController : ControllerBase
         return base.Ok(ApiResponse.FromResult(value));
     }
 
-    protected OkObjectResult OkResponse()
-    {
-        return base.Ok(ApiResponse.FromResult(new object()));
-    }
-
     protected NoContentResult NoContentResponse()
     {
         return base.NoContent();

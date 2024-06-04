@@ -15,5 +15,10 @@ public sealed class AccountMappingProfile : Profile
 
         CreateMap<LoginRequest, LoginCommand>();
         CreateMap<LoginResultDto, LoginResponse>();
+
+        CreateMap<RefreshTokensRequest, RefreshTokensCommand>();
+        CreateMap<TokensDto, TokensResponse>();
+
+        CreateMap<RevokeRefreshTokenRequest, RevokeRefreshTokenCommand>();
     }
 }

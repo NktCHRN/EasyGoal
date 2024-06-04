@@ -1,4 +1,6 @@
-﻿using EasyGoal.Backend.Application.Abstractions.Infrastructure.Identity;
+﻿using EasyGoal.Backend.Application.Abstractions.Infrastructure.Database;
+using EasyGoal.Backend.Application.Abstractions.Infrastructure.Identity;
+using EasyGoal.Backend.Domain.Abstractions;
 using EasyGoal.Backend.Infrastructure.Abstractions;
 using EasyGoal.Backend.Infrastructure.Database;
 using EasyGoal.Backend.Infrastructure.Database.Interceptors;
@@ -52,6 +54,8 @@ public static class DependencyInjection
                     .AddDbContext<ApplicationDbContext>((sp, options)
                         => options
                             .UseNpgsql(configuration.GetConnectionString("ApplicationDbConnection"))
-                            .AddInterceptors(sp.GetRequiredService<SoftDeleteInterceptor>(), sp.GetRequiredService<AuditableInterceptor>(), sp.GetRequiredService<DispatchDomainEventsInterceptor>()));
+                            .AddInterceptors(sp.GetRequiredService<SoftDeleteInterceptor>(), sp.GetRequiredService<AuditableInterceptor>(), sp.GetRequiredService<DispatchDomainEventsInterceptor>()))
+                    .AddScoped<ITransactionProvider, TransactionProvider>()
+                    .AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
     }
 }

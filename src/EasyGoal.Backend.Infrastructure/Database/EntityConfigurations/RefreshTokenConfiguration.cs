@@ -11,5 +11,8 @@ public sealed class RefreshTokenConfiguration : IEntityTypeConfiguration<Refresh
             .HasMaxLength(256);
 
         builder.ToTable("RefreshTokens");
+
+        builder.HasIndex(r => new { r.UserId, r.Token })
+            .HasFilter("\"IsDeleted\" = false");
     }
 }

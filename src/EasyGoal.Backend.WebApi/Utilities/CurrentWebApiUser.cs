@@ -1,5 +1,6 @@
 ﻿using EasyGoal.Backend.Application.Abstractions.Presentation;
 using System.Security.Claims;
+using EasyGoal.Backend.Infrastructure.Identity;
 
 namespace EasyGoal.Backend.WebApi.Utilities;
 
@@ -12,15 +13,7 @@ public sealed class CurrentWebApiUser : ICurrentApplicationUser
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public Guid? Id
-    {
-        get
-        {
-            var parsed = Guid.TryParse(_httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier), out Guid userId);
-
-            return parsed ? userId : null;
-        }
-    }
+    public Guid? Id => _httpContextAccessor.HttpContext?.User?.GetId();
 
     public string? UserName => _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Name);
 

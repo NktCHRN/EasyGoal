@@ -51,28 +51,32 @@ public sealed class AccountController : BaseController
         return OkResponse(_mapper.Map<LoginResultDto>(dto));
     }
 
-    //[HttpPost("tokens/refresh")]
-    //[ProducesResponseType(typeof(TokensResponse), 200)]
-    //[ProducesResponseType(typeof(ErrorResponse), 400)]
-    //[ProducesResponseType(typeof(ErrorResponse), 500)]
-    //public async Task<IActionResult> RefreshTokens([FromBody] TokensRequest request)
-    //{
-    //    var result = await _refreshTokenService.Refresh(_mapper.Map<TokensDto>(request));
+    [HttpPost("tokens/refresh")]
+    [ProducesResponseType(typeof(ApiResponse<TokensResponse>), 200)]
+    [ProducesResponseType(typeof(ApiResponse<TokensResponse>), 400)]
+    [ProducesResponseType(typeof(ApiResponse<TokensResponse>), 500)]
+    public async Task<IActionResult> RefreshTokens([FromBody] RefreshTokensRequest request)
+    {
+        var command = _mapper.Map<RefreshTokensCommand>(request);
 
-    //    return Ok(_mapper.Map<TokensResponse>(result));
-    //}
+        var dto = await _mediator.Send(command);
 
-    //[Authorize]
-    //[HttpPost("tokens/revoke")]
-    //[ProducesResponseType(204)]
-    //[ProducesResponseType(typeof(ErrorResponse), 400)]
-    //[ProducesResponseType(typeof(ErrorResponse), 500)]
-    //public async Task<IActionResult> RevokeToken([FromBody] RevokeTokenRequest request)
-    //{
-    //    await _refreshTokenService.Revoke(User.GetId().GetValueOrDefault(), request.RefreshToken);
+        return OkResponse(_mapper.Map<TokensResponse>(dto));
+    }
 
-    //    return NoContent();
-    //}
+    [Authorize]
+    [HttpPost("tokens/revoke")]
+    [ProducesResponseType(204)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), 400)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), 500)]
+    public async Task<IActionResult> RevokeToken([FromBody] RevokeRefreshTokenRequest request)
+    {
+        var command = _mapper.Map<RevokeRefreshTokenCommand>(request);
+
+        await _mediator.Send(command);
+
+        return NoContentResponse();
+    }
 
     //[Authorize]
     //[HttpGet("details")]
