@@ -5,9 +5,9 @@ using MediatR;
 namespace EasyGoal.Backend.Application.Features.Account.Commands;
 public sealed class RefreshTokensCommandHandler : IRequestHandler<RefreshTokensCommand, TokensDto>
 {
-    private readonly IUserService _userService;
+    private readonly IAccountService _userService;
 
-    public RefreshTokensCommandHandler(IUserService userService)
+    public RefreshTokensCommandHandler(IAccountService userService)
     {
         _userService = userService;
     }

@@ -1,4 +1,5 @@
 ﻿using EasyGoal.Backend.Application.Abstractions.Presentation;
+using EasyGoal.Backend.WebApi.Contracts.Responses.Common;
 using EasyGoal.Backend.WebApi.OutboundParameterTransformers;
 using EasyGoal.Backend.WebApi.Utilities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -70,6 +71,25 @@ public static class DependencyInjection
                     ValidateIssuerSigningKey = true,
 
                     ValidateLifetime = true
+                };
+                options.Events = new JwtBearerEvents
+                {
+                    OnChallenge = context =>
+                    {
+                        context.HandleResponse();
+
+                        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                        context.Response.ContentType = "application/json";
+                        var result = ApiResponse.FromError(new("Auth failed"));
+                        return context.Response.WriteAsJsonAsync(result);
+                    },
+                    OnForbidden = context =>
+                    {
+                        context.Response.StatusCode = StatusCodes.Status403Forbidden;
+                        context.Response.ContentType = "application/json";
+                        var result = ApiResponse.FromError(new("You don't have enough permissions to execute this action"));
+                        return context.Response.WriteAsJsonAsync(result);
+                    }
                 };
             });
         services.AddAuthorization();

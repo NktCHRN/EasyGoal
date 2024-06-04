@@ -20,7 +20,8 @@ public static class DependencyInjection
         return services.AddDatabase(configuration)
             .AddIdentityServices(configuration)
             .AddSingleton(TimeProvider.System)
-            .Configure((Action<JsonSerializerOptions>)(opt => opt.Converters.Add(new JsonStringEnumConverter())));
+            .Configure((Action<JsonSerializerOptions>)(opt => opt.Converters.Add(new JsonStringEnumConverter())))
+            .AddAutoMapper(typeof(IInfrastructureAssemblyMarker).Assembly);
     }
 
     private static IServiceCollection AddIdentityServices(this IServiceCollection services, IConfiguration configuration)
@@ -40,7 +41,7 @@ public static class DependencyInjection
         services.Configure<JwtBearerConfigOptions>(configuration.GetRequiredSection("JwtBearer"));
         services.AddSingleton<IJwtTokenProvider, JwtTokenProvider>();
         services.Configure<TokenProvidersOptions>(configuration.GetRequiredSection("TokenProvidersOptions"));
-        services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IAccountService, AccountService>();
 
         return services;
     }

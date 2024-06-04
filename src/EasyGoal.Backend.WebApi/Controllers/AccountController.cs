@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EasyGoal.Backend.Application.Features.Account.Commands;
 using EasyGoal.Backend.Application.Features.Account.Dto;
+using EasyGoal.Backend.Application.Features.Account.Queries;
 using EasyGoal.Backend.WebApi.Contracts.Requests.Account;
 using EasyGoal.Backend.WebApi.Contracts.Responses.Account;
 using EasyGoal.Backend.WebApi.Contracts.Responses.Common;
@@ -24,9 +25,9 @@ public sealed class AccountController : BaseController
     }
 
     [HttpPost("register")]
-    [ProducesResponseType(typeof(ApiResponse<AccountRegisteredResponse>), 200)]
-    [ProducesResponseType(typeof(ApiResponse<AccountRegisteredResponse>), 400)]
-    [ProducesResponseType(typeof(ApiResponse<AccountRegisteredResponse>), 500)]
+    [ProducesResponseType(typeof(ApiResponse<AccountRegisteredResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<AccountRegisteredResponse>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<AccountRegisteredResponse>), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Register([FromBody] RegisterAccountRequest request)
     {
         var command = _mapper.Map<RegisterAccountCommand>(request);
@@ -38,10 +39,10 @@ public sealed class AccountController : BaseController
 
 
     [HttpPost("login")]
-    [ProducesResponseType(typeof(ApiResponse<LoginResponse>), 200)]
-    [ProducesResponseType(typeof(ApiResponse<LoginResponse>), 400)]
-    [ProducesResponseType(typeof(ApiResponse<LoginResponse>), 401)]
-    [ProducesResponseType(typeof(ApiResponse<LoginResponse>), 500)]
+    [ProducesResponseType(typeof(ApiResponse<LoginResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<LoginResponse>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<LoginResponse>), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiResponse<LoginResponse>), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
         var command = _mapper.Map<LoginCommand>(request);
@@ -52,9 +53,9 @@ public sealed class AccountController : BaseController
     }
 
     [HttpPost("tokens/refresh")]
-    [ProducesResponseType(typeof(ApiResponse<TokensResponse>), 200)]
-    [ProducesResponseType(typeof(ApiResponse<TokensResponse>), 400)]
-    [ProducesResponseType(typeof(ApiResponse<TokensResponse>), 500)]
+    [ProducesResponseType(typeof(ApiResponse<TokensResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<TokensResponse>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<TokensResponse>), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> RefreshTokens([FromBody] RefreshTokensRequest request)
     {
         var command = _mapper.Map<RefreshTokensCommand>(request);
@@ -66,9 +67,10 @@ public sealed class AccountController : BaseController
 
     [Authorize]
     [HttpPost("tokens/revoke")]
-    [ProducesResponseType(204)]
-    [ProducesResponseType(typeof(ApiResponse<object?>), 400)]
-    [ProducesResponseType(typeof(ApiResponse<object?>), 500)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<AccountResponse>), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> RevokeToken([FromBody] RevokeRefreshTokenRequest request)
     {
         var command = _mapper.Map<RevokeRefreshTokenCommand>(request);
@@ -78,28 +80,34 @@ public sealed class AccountController : BaseController
         return NoContentResponse();
     }
 
-    //[Authorize]
-    //[HttpGet("details")]
-    //[ProducesResponseType(typeof(UserResponse), 200)]
-    //[ProducesResponseType(typeof(ErrorResponse), 404)]
-    //[ProducesResponseType(typeof(ErrorResponse), 500)]
-    //public async Task<IActionResult> GetDetails()
-    //{
-    //    var result = await _userService.GetDetails(User.GetId().GetValueOrDefault());
+    [Authorize]
+    [HttpGet("details")]
+    [ProducesResponseType(typeof(ApiResponse<AccountResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<AccountResponse>), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiResponse<AccountResponse>), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiResponse<AccountResponse>), StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GetDetails()
+    {
+        var query = new GetAccountDetailsQuery();
 
-    //    return Ok(_mapper.Map<UserResponse>(result));
-    //}
+        var dto = await _mediator.Send(query);
 
-    //[Authorize]
-    //[HttpPut("details")]
-    //[ProducesResponseType(typeof(UserResponse), 200)]
-    //[ProducesResponseType(typeof(ErrorResponse), 400)]
-    //[ProducesResponseType(typeof(ErrorResponse), 404)]
-    //[ProducesResponseType(typeof(ErrorResponse), 500)]
-    //public async Task<IActionResult> UpdateDetails([FromBody] UpdateUserRequest request)
-    //{
-    //    var result = await _userService.UpdateDetails(User.GetId().GetValueOrDefault(), _mapper.Map<UpdateUserDto>(request));
+        return OkResponse(_mapper.Map<AccountResponse>(dto));
+    }
 
-    //    return Ok(_mapper.Map<UserResponse>(result));
-    //}
+    [Authorize]
+    [HttpPut("details")]
+    [ProducesResponseType(typeof(ApiResponse<AccountResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<AccountResponse>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<AccountResponse>), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiResponse<AccountResponse>), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiResponse<AccountResponse>), StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> UpdateDetails([FromBody] UpdateAccountDetailsRequest request)
+    {
+        var command = _mapper.Map<UpdateAccountDetailsCommand>(request);
+
+        var dto = await _mediator.Send(command);
+
+        return OkResponse(_mapper.Map<AccountResponse>(dto));
+    }
 }

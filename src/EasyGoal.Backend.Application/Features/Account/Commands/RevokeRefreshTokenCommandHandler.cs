@@ -4,9 +4,9 @@ using MediatR;
 namespace EasyGoal.Backend.Application.Features.Account.Commands;
 public sealed class RevokeRefreshTokenCommandHandler : IRequestHandler<RevokeRefreshTokenCommand>
 {
-    private readonly IUserService _userService;
+    private readonly IAccountService _userService;
 
-    public RevokeRefreshTokenCommandHandler(IUserService userService)
+    public RevokeRefreshTokenCommandHandler(IAccountService userService)
     {
         _userService = userService;
     }

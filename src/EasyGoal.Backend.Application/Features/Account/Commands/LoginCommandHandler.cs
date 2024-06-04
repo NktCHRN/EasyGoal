@@ -5,9 +5,9 @@ using MediatR;
 namespace EasyGoal.Backend.Application.Features.Account.Commands;
 public sealed class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResultDto>
 {
-    private readonly IUserService _userService;
+    private readonly IAccountService _userService;
 
-    public LoginCommandHandler(IUserService userService)
+    public LoginCommandHandler(IAccountService userService)
     {
         _userService = userService;
     }

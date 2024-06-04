@@ -28,6 +28,8 @@ public sealed class ExceptionHandlingMiddleware
                 EntityAlreadyExistsException => (HttpStatusCode.Conflict, ex.Message),
                 EntityNotFoundException => (HttpStatusCode.NotFound, ex.Message),
                 EntityValidationFailedException => (HttpStatusCode.BadRequest, ex.Message),
+                UserUnauthorizedException => (HttpStatusCode.Unauthorized, ex.Message),
+                ForbiddenForUserException => (HttpStatusCode.Forbidden, ex.Message),
                 _ => (HttpStatusCode.InternalServerError, "An unexpected error occured on the server.")
             };
 

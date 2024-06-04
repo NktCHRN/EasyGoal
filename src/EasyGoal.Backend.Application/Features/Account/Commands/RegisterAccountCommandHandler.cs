@@ -5,9 +5,9 @@ using MediatR;
 namespace EasyGoal.Backend.Application.Features.Account.Commands;
 public sealed class RegisterAccountCommandHandler : IRequestHandler<RegisterAccountCommand, AccountDto>
 {
-    private readonly IUserService _userService;
+    private readonly IAccountService _userService;
 
-    public RegisterAccountCommandHandler(IUserService userService)
+    public RegisterAccountCommandHandler(IAccountService userService)
     {
         _userService = userService;
     }

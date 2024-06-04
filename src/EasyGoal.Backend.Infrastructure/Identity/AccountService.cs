@@ -1,19 +1,22 @@
-﻿using EasyGoal.Backend.Application.Abstractions.Infrastructure.Identity;
+﻿using AutoMapper;
+using EasyGoal.Backend.Application.Abstractions.Infrastructure.Identity;
 using EasyGoal.Backend.Application.Abstractions.Presentation;
 using EasyGoal.Backend.Application.Extensions;
+using EasyGoal.Backend.Application.Features.Account.Commands;
 using EasyGoal.Backend.Application.Features.Account.Dto;
 using EasyGoal.Backend.Domain.Abstractions;
 using EasyGoal.Backend.Domain.Entities.UserAttributes;
 using EasyGoal.Backend.Domain.Exceptions;
 using EasyGoal.Backend.Infrastructure.Abstractions;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.Drawing;
 using System.Security;
 using System.Security.Claims;
 
 namespace EasyGoal.Backend.Infrastructure.Identity;
-public sealed class UserService : IUserService
+public sealed class AccountService : IAccountService
 {
     private readonly UserManager<IdentityApplicationUser> _userManager;
     private readonly IJwtTokenProvider _jwtTokenProvider;
@@ -21,8 +24,9 @@ public sealed class UserService : IUserService
     private readonly TokenProvidersOptions _tokenProvidersOptions;
     private readonly ICurrentApplicationUser _currentApplicationUser;
     private readonly IRepository<RefreshToken> _refreshTokenRepository;
+    private readonly IMapper _mapper;
 
-    public UserService(UserManager<IdentityApplicationUser> userManager, IJwtTokenProvider jwtTokenProvider, TimeProvider timeProvider, IOptions<TokenProvidersOptions> tokenProvidersOptions, ICurrentApplicationUser currentApplicationUser, IRepository<RefreshToken> refreshTokenRepository)
+    public AccountService(UserManager<IdentityApplicationUser> userManager, IJwtTokenProvider jwtTokenProvider, TimeProvider timeProvider, IOptions<TokenProvidersOptions> tokenProvidersOptions, ICurrentApplicationUser currentApplicationUser, IRepository<RefreshToken> refreshTokenRepository, IMapper mapper)
     {
         _userManager = userManager;
         _jwtTokenProvider = jwtTokenProvider;
@@ -30,13 +34,14 @@ public sealed class UserService : IUserService
         _tokenProvidersOptions = tokenProvidersOptions.Value;
         _currentApplicationUser = currentApplicationUser;
         _refreshTokenRepository = refreshTokenRepository;
+        _mapper = mapper;
     }
 
     public async Task<AccountDto> RegisterAsync(string email, string name, string password)
     {
         if (string.IsNullOrWhiteSpace(name))
         {
-            throw new IdentityEntityValidationFailedException("Name must not be empty.");
+            throw new EntityValidationFailedException("Name must not be empty.");
         }
 
         var user = new IdentityApplicationUser
@@ -50,7 +55,7 @@ public sealed class UserService : IUserService
         var userCreationResults = await _userManager.CreateAsync(user, password);
         if (!userCreationResults.Succeeded)
         {
-            throw new IdentityEntityValidationFailedException(userCreationResults.Errors);
+            throw new EntityValidationFailedException(IdentityUtilities.IdentityFailuresToString(userCreationResults.Errors));
         }
 
         return new AccountDto
@@ -76,7 +81,7 @@ public sealed class UserService : IUserService
         var user = await _userManager.FindByNameAsync(email);
         if (user is null || !await _userManager.CheckPasswordAsync(user, password))
         {
-            throw new IdentityEntityValidationFailedException("Wrong email or password");
+            throw new UserUnauthorizedException("Wrong email or password");
         }
 
         var refreshToken = _jwtTokenProvider.GenerateRefreshToken();
@@ -140,5 +145,25 @@ public sealed class UserService : IUserService
             ?? throw new EntityNotFoundException("User or refresh token was not found");
 
         await _refreshTokenRepository.DeleteAsync(refreshTokenDataModel);
+    }
+
+    public async Task<AccountDto> GetAccountDetails()
+    {
+        var user = await _userManager.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == _currentApplicationUser.Id)
+            ?? throw new EntityNotFoundException("User was not found");
+
+        return _mapper.Map<AccountDto>(user);
+    }
+
+    public async Task<AccountDto> UpdateAccountDetails(UpdateAccountDetailsCommand updateAccountCommand)
+    {
+        var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == _currentApplicationUser.Id)
+            ?? throw new EntityNotFoundException("User was not found");
+
+        user.Name = updateAccountCommand.Name;
+
+        await _userManager.UpdateAsync(user);
+
+        return _mapper.Map<AccountDto>(user);
     }
 }
