@@ -5,4 +5,5 @@ public interface ICurrentApplicationUser
     string? UserName { get; }
     string? Email { get; }
     string? FullName { get; }
+    Guid GetValidatedId();
 }

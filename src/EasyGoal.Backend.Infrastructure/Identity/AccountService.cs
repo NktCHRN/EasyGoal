@@ -5,7 +5,7 @@ using EasyGoal.Backend.Application.Extensions;
 using EasyGoal.Backend.Application.Features.Account.Commands;
 using EasyGoal.Backend.Application.Features.Account.Dto;
 using EasyGoal.Backend.Domain.Abstractions;
-using EasyGoal.Backend.Domain.Entities.UserAttributes;
+using EasyGoal.Backend.Domain.Entities.DecisionHelper;
 using EasyGoal.Backend.Domain.Exceptions;
 using EasyGoal.Backend.Infrastructure.Abstractions;
 using Microsoft.AspNetCore.Identity;
@@ -49,7 +49,6 @@ public sealed class AccountService : IAccountService
             Name = name.Trim(),
             Email = email,
             UserName = email,
-            UserCategories = CreateDefaultCategories(),
             DecisionHelperCriteria = DecisionHelperCriterion.DefaultCriteria
         };
 
@@ -65,16 +64,6 @@ public sealed class AccountService : IAccountService
             Email = user.Email,
             Name = user.Name
         };
-    }
-
-    private static IList<Category> CreateDefaultCategories()
-    {
-        return
-            [
-                Category.Create("Work", Color.DeepSkyBlue.ToHexString()),
-                Category.Create("Study", Color.SaddleBrown.ToHexString()),
-                Category.Create("Health", Color.LightGreen.ToHexString()),
-            ];
     }
 
     public async Task<LoginResultDto> LoginAsync(string email, string password)

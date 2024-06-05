@@ -26,8 +26,8 @@ public sealed class AccountController : BaseController
 
     [HttpPost("register")]
     [ProducesResponseType(typeof(ApiResponse<AccountRegisteredResponse>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ApiResponse<AccountRegisteredResponse>), StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(typeof(ApiResponse<AccountRegisteredResponse>), StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Register([FromBody] RegisterAccountRequest request)
     {
         var command = _mapper.Map<RegisterAccountCommand>(request);
@@ -40,9 +40,9 @@ public sealed class AccountController : BaseController
 
     [HttpPost("login")]
     [ProducesResponseType(typeof(ApiResponse<LoginResponse>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ApiResponse<LoginResponse>), StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(typeof(ApiResponse<LoginResponse>), StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType(typeof(ApiResponse<LoginResponse>), StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
         var command = _mapper.Map<LoginCommand>(request);
@@ -54,8 +54,8 @@ public sealed class AccountController : BaseController
 
     [HttpPost("tokens/refresh")]
     [ProducesResponseType(typeof(ApiResponse<TokensResponse>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ApiResponse<TokensResponse>), StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(typeof(ApiResponse<TokensResponse>), StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> RefreshTokens([FromBody] RefreshTokensRequest request)
     {
         var command = _mapper.Map<RefreshTokensCommand>(request);
@@ -69,7 +69,7 @@ public sealed class AccountController : BaseController
     [HttpPost("tokens/revoke")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(typeof(ApiResponse<AccountResponse>), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> RevokeToken([FromBody] RevokeRefreshTokenRequest request)
     {
@@ -83,9 +83,9 @@ public sealed class AccountController : BaseController
     [Authorize]
     [HttpGet("details")]
     [ProducesResponseType(typeof(ApiResponse<AccountResponse>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ApiResponse<AccountResponse>), StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType(typeof(ApiResponse<AccountResponse>), StatusCodes.Status404NotFound)]
-    [ProducesResponseType(typeof(ApiResponse<AccountResponse>), StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetDetails()
     {
         var query = new GetAccountDetailsQuery();
@@ -98,10 +98,10 @@ public sealed class AccountController : BaseController
     [Authorize]
     [HttpPut("details")]
     [ProducesResponseType(typeof(ApiResponse<AccountResponse>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ApiResponse<AccountResponse>), StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(typeof(ApiResponse<AccountResponse>), StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType(typeof(ApiResponse<AccountResponse>), StatusCodes.Status404NotFound)]
-    [ProducesResponseType(typeof(ApiResponse<AccountResponse>), StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> UpdateDetails([FromBody] UpdateAccountDetailsRequest request)
     {
         var command = _mapper.Map<UpdateAccountDetailsCommand>(request);

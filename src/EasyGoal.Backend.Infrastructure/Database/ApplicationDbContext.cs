@@ -1,7 +1,7 @@
 ﻿using EasyGoal.Backend.Domain.Abstractions.Entities;
 using EasyGoal.Backend.Domain.Entities.Common;
 using EasyGoal.Backend.Domain.Entities.Goal;
-using EasyGoal.Backend.Domain.Entities.UserAttributes;
+using EasyGoal.Backend.Domain.Entities.DecisionHelper;
 using EasyGoal.Backend.Infrastructure.Database.Extensions;
 using EasyGoal.Backend.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
@@ -15,8 +15,6 @@ public sealed class ApplicationDbContext : IdentityDbContext<IdentityApplication
     public DbSet<Domain.Entities.Task.Task> Tasks => Set<Domain.Entities.Task.Task>();
 
     public DbSet<Goal> Goals => Set<Goal>();
-
-    public DbSet<Category> Categories => Set<Category>();
 
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
 

@@ -1,5 +1,5 @@
 ﻿using EasyGoal.Backend.Domain.Abstractions.Entities;
-using EasyGoal.Backend.Domain.Entities.UserAttributes;
+using EasyGoal.Backend.Domain.Entities.DecisionHelper;
 using Microsoft.AspNetCore.Identity;
 
 namespace EasyGoal.Backend.Infrastructure.Identity;
@@ -13,6 +13,5 @@ public class IdentityApplicationUser : IdentityUser<Guid>, IAuditableEntity, ISo
     public string? ModifiedBy { get; set; }
 
     public IList<RefreshToken> RefreshTokens { get; set; } = [];
-    public IList<Category> UserCategories { get; set; } = [];
     public IList<DecisionHelperCriterion> DecisionHelperCriteria { get; set; } = [];
 }

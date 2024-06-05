@@ -1,4 +1,4 @@
-﻿using EasyGoal.Backend.Domain.Entities.UserAttributes;
+﻿using EasyGoal.Backend.Domain.Entities.DecisionHelper;
 using EasyGoal.Backend.Infrastructure.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

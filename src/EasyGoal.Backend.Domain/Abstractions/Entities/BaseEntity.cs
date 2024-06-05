@@ -25,4 +25,9 @@ public abstract class BaseEntity : ISoftDeletableEntity
     {
         _domainEvents.Clear();
     }
+
+    public void Delete()
+    {
+        IsDeleted = true;
+    }
 }
