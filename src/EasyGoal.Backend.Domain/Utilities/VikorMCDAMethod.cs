@@ -3,7 +3,7 @@
 namespace EasyGoal.Backend.Domain.Utilities;
 public sealed class VikorMCDAMethod : IMCDAMethod
 {
-    private const double V = 0.75;
+    private const double V = 0.6;
 
     public IReadOnlyList<RankedAlternative> GetRanking(int[,] estimates, double[] weights)
     {

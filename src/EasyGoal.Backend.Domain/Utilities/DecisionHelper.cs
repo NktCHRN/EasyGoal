@@ -6,12 +6,15 @@ public sealed class DecisionHelper : IDecisionHelper
 {
     private readonly IMCDAMethod _mcdaMethod;
 
+    private const int MinEstimate = 1;
+    private const int MaxEstimate = 10;
+
     public DecisionHelper(IMCDAMethod mcdaMethod)
     {
         _mcdaMethod = mcdaMethod;
     }
 
-    public IReadOnlyList<RankedObjective> GetRanking(IReadOnlyList<ObjectiveEstimates> estimates, IEnumerable<DecisionHelperCriterion> criteria)
+    public IReadOnlyList<RankedObjective> GetRanking(IReadOnlyList<ObjectiveEstimates> estimates, IReadOnlyList<DecisionHelperCriterion> criteria)
     {
         if (estimates.Count < 2)
         {
@@ -24,9 +27,14 @@ public sealed class DecisionHelper : IDecisionHelper
         }
 
         if (estimates.Select(e => e.Estimates.Count).Distinct().Count() != 1
-            || estimates.First().Estimates.Count != criteria.Count())
+            || estimates[0].Estimates.Count != criteria.Count)
         {
             throw new EntityValidationFailedException("Estimates by all criteria must be specified for all objectives");
+        }
+
+        if (estimates.SelectMany(e => e.Estimates).Any(e => e < MinEstimate || e > MaxEstimate))
+        {
+            throw new EntityValidationFailedException($"Estimates must be in range [{MinEstimate};{MaxEstimate}]");
         }
 
         var (alternativesCount, criteriaCount) = (estimates.Count, criteria.Count());
@@ -35,7 +43,9 @@ public sealed class DecisionHelper : IDecisionHelper
         {
             for (var j = 0; j < criteriaCount; j++)
             {
-                alternativesMatrix[i, j] = estimates[i].Estimates[j];
+                alternativesMatrix[i, j] = criteria[j].Type == Enums.DecisionHelperCriterionType.Ascending 
+                    ? estimates[i].Estimates[j] 
+                    : MaxEstimate - estimates[i].Estimates[j] + MinEstimate;
             }
         }
 
