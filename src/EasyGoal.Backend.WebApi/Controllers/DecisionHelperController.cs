@@ -28,7 +28,7 @@ public sealed class DecisionHelperController : BaseController
     [ProducesResponseType(typeof(ApiResponse<DecisionHelperCriteriaResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> GetCriteriaAsync()
+    public async Task<IActionResult> GetArrangementAsync()
     {
         var query = new GetDecisionHelperCriteriaQuery();
 
@@ -62,5 +62,18 @@ public sealed class DecisionHelperController : BaseController
         await _mediator.Send(command);
 
         return NoContentResponse();
+    }
+
+    [HttpPost("ranking")]
+    [ProducesResponseType(typeof(ApiResponse<DecisionHelperCriteriaResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GetObjectivesRankingAsync([FromBody] GetObjectivesRankingRequest request)
+    {
+        var query = _mapper.Map< GetObjectivesRankingQuery>(request);
+
+        var dto = await _mediator.Send(query);
+
+        return OkResponse(_mapper.Map<ObjectivesRankingResponse>(dto));
     }
 }

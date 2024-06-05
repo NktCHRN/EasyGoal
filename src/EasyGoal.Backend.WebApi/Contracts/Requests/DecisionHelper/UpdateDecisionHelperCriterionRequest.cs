@@ -2,6 +2,6 @@
 
 namespace EasyGoal.Backend.WebApi.Contracts.Requests.DecisionHelper;
 
-public sealed record UpdateDecisionHelperCriterionRequest(Guid? Id, string Name, decimal Weight, DecisionHelperCriterionType Type)
+public sealed record UpdateDecisionHelperCriterionRequest(Guid? Id, string Name, double Weight, DecisionHelperCriterionType Type)
 {
 }

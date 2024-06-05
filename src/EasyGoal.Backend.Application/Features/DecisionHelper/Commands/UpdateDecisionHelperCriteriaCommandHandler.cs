@@ -11,6 +11,8 @@ public sealed class UpdateDecisionHelperCriteriaCommandHandler : IRequestHandler
     private readonly IRepository<DecisionHelperCriterion> _decisionHelperCriterionRepository;
     private readonly ICurrentApplicationUser _currentApplicationUser;
 
+    private const int MaxNameLength = 20;
+
     public UpdateDecisionHelperCriteriaCommandHandler(IRepository<DecisionHelperCriterion> decisionHelperCriterionRepository, ICurrentApplicationUser currentApplicationUser)
     {
         _decisionHelperCriterionRepository = decisionHelperCriterionRepository;
@@ -42,7 +44,8 @@ public sealed class UpdateDecisionHelperCriteriaCommandHandler : IRequestHandler
                 addedCriteria.Add(criterion);
             }
         }
-        DecisionHelperCriterion.ValidateList(updatedCriteria.Concat(addedCriteria));
+
+        ValidateCriteria(updatedCriteria.Concat(addedCriteria));
 
         foreach (var criterion in currentCriteria.Except(updatedCriteria))
         {
@@ -50,5 +53,18 @@ public sealed class UpdateDecisionHelperCriteriaCommandHandler : IRequestHandler
         }
         
         await _decisionHelperCriterionRepository.AddRangeAsync(addedCriteria, cancellationToken);
+    }
+
+    private static void ValidateCriteria(IEnumerable<DecisionHelperCriterion> criteria)
+    {
+        foreach (var criterion in criteria)
+        {
+            if (criterion.Name.Length > MaxNameLength)
+            {
+                throw new EntityValidationFailedException($"Max criterion name length is {MaxNameLength}");
+            }
+        }
+
+        DecisionHelperCriterion.ValidateList(criteria);
     }
 }

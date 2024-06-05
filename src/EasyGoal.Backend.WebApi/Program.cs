@@ -1,4 +1,5 @@
 using EasyGoal.Backend.Application;
+using EasyGoal.Backend.Domain;
 using EasyGoal.Backend.Infrastructure;
 using EasyGoal.Backend.WebApi;
 using EasyGoal.Backend.WebApi.Middlewares;
@@ -6,6 +7,7 @@ using EasyGoal.Backend.WebApi.Middlewares;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
+    .AddDomainServices()
     .AddApplicationServices(builder.Configuration)
     .AddInfrastructureServices(builder.Configuration)
     .AddWebApiServices(builder.Configuration);

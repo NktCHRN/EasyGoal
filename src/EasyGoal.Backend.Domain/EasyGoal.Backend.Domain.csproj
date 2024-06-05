@@ -7,14 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="DomainEvents\" />
-    <Folder Include="Utilities\" />
-  </ItemGroup>
-
-  <ItemGroup>
 	  <PackageReference Include="Ardalis.Specification" Version="8.0.0" />
     <PackageReference Include="MassTransit.Abstractions" Version="8.2.2" />
     <PackageReference Include="MediatR.Contracts" Version="2.0.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
   </ItemGroup>
 
 </Project>
