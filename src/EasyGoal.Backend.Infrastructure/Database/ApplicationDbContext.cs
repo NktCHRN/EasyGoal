@@ -7,14 +7,19 @@ using EasyGoal.Backend.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using EasyGoal.Backend.Domain.Entities.Task;
 
 namespace EasyGoal.Backend.Infrastructure.Database;
 public sealed class ApplicationDbContext : IdentityDbContext<IdentityApplicationUser, IdentityRole<Guid>, Guid>
 {
     public DbSet<FileAttachment> FileAttachments => Set<FileAttachment>();
-    public DbSet<Domain.Entities.Task.Task> Tasks => Set<Domain.Entities.Task.Task>();
 
     public DbSet<Goal> Goals => Set<Goal>();
+    public DbSet<SubGoal> SubGoals => Set<SubGoal>();
+    public DbSet<HistoryRecord> HistoryRecords => Set<HistoryRecord>();
+
+    public DbSet<Domain.Entities.Task.Task> Tasks => Set<Domain.Entities.Task.Task>();
+    public DbSet<SubTask> SubTasks => Set<SubTask>();
 
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
 

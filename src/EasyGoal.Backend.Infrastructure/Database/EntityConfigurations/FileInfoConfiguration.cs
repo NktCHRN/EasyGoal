@@ -12,8 +12,5 @@ public sealed class FileInfoConfiguration : IEntityTypeConfiguration<FileAttachm
             .HasMaxLength(256);
         builder.Property(p => p.BlobReference)
             .HasMaxLength(256);
-        builder.HasOne<IdentityApplicationUser>()
-            .WithMany()
-            .HasForeignKey(f => f.UserId);
     }
 }
