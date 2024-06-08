@@ -16,7 +16,7 @@ public sealed class ApplicationDbContext : IdentityDbContext<IdentityApplication
 
     public DbSet<Goal> Goals => Set<Goal>();
     public DbSet<SubGoal> SubGoals => Set<SubGoal>();
-    public DbSet<HistoryRecord> HistoryRecords => Set<HistoryRecord>();
+    public DbSet<HistoricalRecord> HistoricalRecords => Set<HistoricalRecord>();
 
     public DbSet<Domain.Entities.Task.Task> Tasks => Set<Domain.Entities.Task.Task>();
     public DbSet<SubTask> SubTasks => Set<SubTask>();
