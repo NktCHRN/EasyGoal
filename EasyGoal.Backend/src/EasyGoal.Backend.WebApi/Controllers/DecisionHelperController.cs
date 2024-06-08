@@ -64,7 +64,7 @@ public sealed class DecisionHelperController : BaseController
         return NoContentResponse();
     }
 
-    [HttpPost("ranking")]
+    [HttpPost("rankings")]
     [ProducesResponseType(typeof(ApiResponse<DecisionHelperCriteriaResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status500InternalServerError)]
