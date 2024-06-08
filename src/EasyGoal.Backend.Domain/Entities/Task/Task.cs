@@ -11,7 +11,7 @@ public class Task : BaseAuditableEntity
     public DateTimeOffset? EndTime { get; private set; }
     public string? Notes { get; private set; }
 
-    public SynchronisationStatus? IsSynchonisedWithGoogle { get; set; }
+    public SynchronisationStatus? GoogleSynchronisationStatus { get; set; }
 
     public IReadOnlyList<SubTask> SubTasks => _subTasks.AsReadOnly();
     private readonly List<SubTask> _subTasks = [];
