@@ -7,7 +7,7 @@ public class Goal : BaseAuditableEntity
     public string Name { get; private set; } = string.Empty;
     public string? Description { get; private set; }
     public string? PictureLocalFileName { get; set; }
-    public DateTimeOffset Deadline { get; private set; }
+    public DateOnly Deadline { get; private set; }
     public Guid UserId { get; set; }
 
     public IReadOnlyList<FileAttachment> FileAttachments => _fileAttachments.AsReadOnly();
