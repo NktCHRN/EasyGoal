@@ -37,7 +37,7 @@ public sealed class DecisionHelper : IDecisionHelper
             throw new EntityValidationFailedException($"Estimates must be in range [{MinEstimate};{MaxEstimate}]");
         }
 
-        var (alternativesCount, criteriaCount) = (estimates.Count, criteria.Count());
+        var (alternativesCount, criteriaCount) = (estimates.Count, criteria.Count);
         var alternativesMatrix = new int[alternativesCount, criteriaCount];
         for (var i = 0; i < alternativesCount; i++)
         {

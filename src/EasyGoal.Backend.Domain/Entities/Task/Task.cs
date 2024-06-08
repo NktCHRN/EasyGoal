@@ -1,4 +1,5 @@
 ﻿using EasyGoal.Backend.Domain.Abstractions.Entities;
+using EasyGoal.Backend.Domain.Entities.Goal;
 using EasyGoal.Backend.Domain.Enums;
 
 namespace EasyGoal.Backend.Domain.Entities.Task;
@@ -14,4 +15,6 @@ public class Task : BaseAuditableEntity
 
     public IReadOnlyList<SubTask> SubTasks => _subTasks.AsReadOnly();
     private readonly List<SubTask> _subTasks = [];
+    public Guid SubGoalId { get; private set; }
+    public SubGoal SubGoal { get; private set; } = null!;
 }

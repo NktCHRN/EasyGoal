@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using EasyGoal.Backend.Application.Abstractions.Infrastructure.Identity;
 using EasyGoal.Backend.Application.Abstractions.Presentation;
-using EasyGoal.Backend.Application.Extensions;
 using EasyGoal.Backend.Application.Features.Account.Commands;
 using EasyGoal.Backend.Application.Features.Account.Dto;
 using EasyGoal.Backend.Domain.Abstractions;
@@ -11,7 +10,6 @@ using EasyGoal.Backend.Infrastructure.Abstractions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using System.Drawing;
 using System.Security;
 using System.Security.Claims;
 
@@ -89,7 +87,7 @@ public sealed class AccountService : IAccountService
         };
     }
 
-    private static IEnumerable<Claim> GetClaims(IdentityApplicationUser user)
+    private static List<Claim> GetClaims(IdentityApplicationUser user)
     {
         var claims = new List<Claim>
         {
