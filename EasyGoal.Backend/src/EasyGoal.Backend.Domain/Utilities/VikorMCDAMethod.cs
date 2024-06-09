@@ -5,9 +5,9 @@ public sealed class VikorMCDAMethod : IMCDAMethod
 {
     private const double V = 0.6;
 
-    public IReadOnlyList<RankedAlternative> GetRanking(int[,] estimates, double[] weights)
+    public IReadOnlyList<RankedAlternative> GetRanking(int[,] estimates, double[] weights, bool[] isMaximizedCriteria)
     {
-        var normalizedEstimates = GetNormalizedEstimates(estimates);
+        var normalizedEstimates = GetNormalizedEstimates(estimates, isMaximizedCriteria);
 
         var weightedEstimates = GetWeightedEstimates(normalizedEstimates, weights);
 
@@ -18,10 +18,10 @@ public sealed class VikorMCDAMethod : IMCDAMethod
         return GetSortedRanking(s, r, q);
     }
 
-    private static double[,] GetNormalizedEstimates(int[,] estimates)
+    private static double[,] GetNormalizedEstimates(int[,] estimates, bool[] isMaximizedCriteria)
     {
-        var minEstimates = GetMinEstimatesByCriteria(estimates);
-        var maxEstimates = GetMaxEstimatesByCriteria(estimates);
+        var fStar = GetFStarByCriteria(estimates, isMaximizedCriteria);
+        var fDash = GetFDashByCriteria(estimates, isMaximizedCriteria);
 
         var normalizedEstimates = new double[estimates.GetLength(0), estimates.GetLength(1)];
 
@@ -29,59 +29,73 @@ public sealed class VikorMCDAMethod : IMCDAMethod
         {
             for (var j = 0; j < normalizedEstimates.GetLength(1); j++)
             {
-                var delta = maxEstimates[j] - minEstimates[j];
+                var delta = fStar[j] - fDash[j];
                 if (delta == 0)     // In this case we will have 0 / 0 everywhere. Let's change it to 1 / 0.
                 {
                     delta = 1;
                 }
 
-                normalizedEstimates[i, j] = (maxEstimates[j] - estimates[i, j]) / (double)delta;
+                normalizedEstimates[i, j] = (fStar[j] - estimates[i, j]) / (double)delta;
             }
         }
 
         return normalizedEstimates;
     }
 
-    private static int[] GetMinEstimatesByCriteria(int[,] estimates)
+    private static int[] GetFStarByCriteria(int[,] estimates, bool[] isMaximizedCriteria)
     {
         var criteriaCount = estimates.GetLength(1);
-        var minEstimates = new int[criteriaCount];
+        var fStar = new int[criteriaCount];
 
         for (var i = 0; i < criteriaCount; i++)
         {
-            minEstimates[i] = int.MaxValue;
-
-            for (var j = 0; j < estimates.GetLength(0); j++)
-            {
-                if (estimates[j, i] < minEstimates[i])
-                {
-                    minEstimates[i] = estimates[j, i];
-                }
-            }
+            fStar[i] = isMaximizedCriteria[i] ? GetMaxByCriterion(estimates, i) : GetMinByCriterion(estimates, i);
         }
 
-        return minEstimates;
+        return fStar;
     }
 
-    private static int[] GetMaxEstimatesByCriteria(int[,] estimates)
+    private static int[] GetFDashByCriteria(int[,] estimates, bool[] isMaximizedCriteria)
     {
         var criteriaCount = estimates.GetLength(1);
-        var maxEstimates = new int[criteriaCount];
+        var fDash = new int[criteriaCount];
 
         for (var i = 0; i < criteriaCount; i++)
         {
-            maxEstimates[i] = int.MinValue;
+            fDash[i] = isMaximizedCriteria[i] ? GetMinByCriterion(estimates, i) : GetMaxByCriterion(estimates, i);
+        }
 
-            for (var j = 0; j < estimates.GetLength(0); j++)
+        return fDash;
+    }
+
+    private static int GetMaxByCriterion(int[,] estimates, int criterionIndex)
+    {
+        var maxEstimate = int.MinValue;
+
+        for (var j = 0; j < estimates.GetLength(0); j++)
+        {
+            if (estimates[j, criterionIndex] > maxEstimate)
             {
-                if (estimates[j, i] > maxEstimates[i])
-                {
-                    maxEstimates[i] = estimates[j, i];
-                }
+                maxEstimate = estimates[j, criterionIndex];
             }
         }
 
-        return maxEstimates;
+        return maxEstimate;
+    }
+
+    private static int GetMinByCriterion(int[,] estimates, int criterionIndex)
+    {
+        var minEstimate = int.MaxValue;
+
+        for (var j = 0; j < estimates.GetLength(0); j++)
+        {
+            if (estimates[j, criterionIndex] < minEstimate)
+            {
+                minEstimate = estimates[j, criterionIndex];
+            }
+        }
+
+        return minEstimate;
     }
 
     private static double[,] GetWeightedEstimates(double[,] normalizedEstimates, double[] weights)

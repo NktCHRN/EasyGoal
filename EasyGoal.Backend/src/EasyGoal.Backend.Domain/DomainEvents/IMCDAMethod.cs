@@ -3,5 +3,5 @@
 namespace EasyGoal.Backend.Domain.DomainEvents;
 public interface IMCDAMethod
 {
-    IReadOnlyList<RankedAlternative> GetRanking(int[,] estimates, double[] weights);
+    IReadOnlyList<RankedAlternative> GetRanking(int[,] estimates, double[] weights, bool[] isMaximizedCriteria);
 }

@@ -43,9 +43,7 @@ public sealed class DecisionHelper : IDecisionHelper
         {
             for (var j = 0; j < criteriaCount; j++)
             {
-                alternativesMatrix[i, j] = criteria[j].Type == Enums.DecisionHelperCriterionType.Ascending 
-                    ? estimates[i].Estimates[j] 
-                    : MaxEstimate - estimates[i].Estimates[j] + MinEstimate;
+                alternativesMatrix[i, j] = estimates[i].Estimates[j];
             }
         }
 
@@ -53,7 +51,9 @@ public sealed class DecisionHelper : IDecisionHelper
             .Select(c => c.Weight)
             .ToArray();
 
-        var ranking = _mcdaMethod.GetRanking(alternativesMatrix, weights);
+        var isMaximizedCriteria = criteria.Select(c => c.Type == Enums.DecisionHelperCriterionType.Ascending).ToArray();
+
+        var ranking = _mcdaMethod.GetRanking(alternativesMatrix, weights, isMaximizedCriteria);
 
         return ranking.Select(r => new RankedObjective
         {
