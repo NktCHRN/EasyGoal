@@ -7,7 +7,7 @@ public sealed class DecisionHelper : IDecisionHelper
     private readonly IMCDAMethod _mcdaMethod;
 
     private const int MinEstimate = 1;
-    private const int MaxEstimate = 10;
+    private const int MaxEstimate = 5;
 
     public DecisionHelper(IMCDAMethod mcdaMethod)
     {
