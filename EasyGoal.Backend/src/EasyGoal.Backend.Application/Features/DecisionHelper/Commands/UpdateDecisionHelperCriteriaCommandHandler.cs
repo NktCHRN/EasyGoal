@@ -11,7 +11,7 @@ public sealed class UpdateDecisionHelperCriteriaCommandHandler : IRequestHandler
     private readonly IRepository<DecisionHelperCriterion> _decisionHelperCriterionRepository;
     private readonly ICurrentApplicationUser _currentApplicationUser;
 
-    private const int MaxNameLength = 20;
+    private const int MaxNameLength = 50;
 
     public UpdateDecisionHelperCriteriaCommandHandler(IRepository<DecisionHelperCriterion> decisionHelperCriterionRepository, ICurrentApplicationUser currentApplicationUser)
     {
