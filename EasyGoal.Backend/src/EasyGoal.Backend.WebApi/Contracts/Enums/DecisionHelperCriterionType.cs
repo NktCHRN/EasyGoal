@@ -2,6 +2,6 @@
 
 public enum DecisionHelperCriterionType
 {
-    Ascending,
-    Descending
+    Maximization,
+    Minimization
 }

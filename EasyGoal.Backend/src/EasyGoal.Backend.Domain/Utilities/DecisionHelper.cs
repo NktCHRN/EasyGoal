@@ -51,7 +51,7 @@ public sealed class DecisionHelper : IDecisionHelper
             .Select(c => c.Weight)
             .ToArray();
 
-        var isMaximizedCriteria = criteria.Select(c => c.Type == Enums.DecisionHelperCriterionType.Ascending).ToArray();
+        var isMaximizedCriteria = criteria.Select(c => c.Type == Enums.DecisionHelperCriterionType.Maximization).ToArray();
 
         var ranking = _mcdaMethod.GetRanking(alternativesMatrix, weights, isMaximizedCriteria);
 

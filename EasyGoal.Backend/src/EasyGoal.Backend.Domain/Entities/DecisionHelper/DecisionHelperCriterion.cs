@@ -63,10 +63,10 @@ public sealed class DecisionHelperCriterion : BaseEntity
 
     public static IList<DecisionHelperCriterion> DefaultCriteria =>
     [
-        Create(1, "Value", 0.2, DecisionHelperCriterionType.Ascending),
-        Create(2, "Attainability", 0.2, DecisionHelperCriterionType.Ascending),
-        Create(3, "Difficulty", 0.2, DecisionHelperCriterionType.Descending),
-        Create(4, "Urgency", 0.2, DecisionHelperCriterionType.Ascending),
-        Create(5, "Enjoyment", 0.2, DecisionHelperCriterionType.Ascending),
+        Create(1, "Value", 0.2, DecisionHelperCriterionType.Maximization),
+        Create(2, "Attainability", 0.2, DecisionHelperCriterionType.Maximization),
+        Create(3, "Difficulty", 0.2, DecisionHelperCriterionType.Minimization),
+        Create(4, "Urgency", 0.2, DecisionHelperCriterionType.Maximization),
+        Create(5, "Enjoyment", 0.2, DecisionHelperCriterionType.Maximization),
     ];
 }
