@@ -1,5 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using FluentValidation;
+using MediatR;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using EasyGoal.Backend.Application.MediatrBehaviors;
 
 namespace EasyGoal.Backend.Application;
 public static class DependencyInjection
@@ -7,7 +10,10 @@ public static class DependencyInjection
     public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
     {
         return services
-            .AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IApplicationAssemblyMarker).Assembly))
+            .AddValidatorsFromAssembly(typeof(IApplicationAssemblyMarker).Assembly)
+            .AddMediatR(cfg => cfg
+                .RegisterServicesFromAssembly(typeof(IApplicationAssemblyMarker).Assembly)
+                .AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>)))
             .AddAutoMapper(typeof(IApplicationAssemblyMarker).Assembly);
     }
 }

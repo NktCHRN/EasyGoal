@@ -53,7 +53,7 @@ public sealed class DecisionHelperController : BaseController
 
     [HttpPost("criteria/reset")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> ResetCriteriaAsync()
     {

@@ -69,4 +69,9 @@ public sealed class DecisionHelperCriterion : BaseEntity
         Create(4, "Urgency", 0.2, DecisionHelperCriterionType.Maximization),
         Create(5, "Enjoyment", 0.2, DecisionHelperCriterionType.Maximization),
     ];
+
+    public new void Delete()
+    {
+        base.Delete();
+    }
 }

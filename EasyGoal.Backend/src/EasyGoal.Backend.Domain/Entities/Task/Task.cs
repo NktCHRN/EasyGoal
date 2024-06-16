@@ -1,6 +1,7 @@
 ﻿using EasyGoal.Backend.Domain.Abstractions.Entities;
 using EasyGoal.Backend.Domain.Entities.Goal;
 using EasyGoal.Backend.Domain.Enums;
+using EasyGoal.Backend.Domain.Exceptions;
 
 namespace EasyGoal.Backend.Domain.Entities.Task;
 public class Task : BaseAuditableEntity
@@ -17,4 +18,19 @@ public class Task : BaseAuditableEntity
     private readonly List<SubTask> _subTasks = [];
     public Guid SubGoalId { get; private set; }
     public SubGoal SubGoal { get; private set; } = null!;
+
+    public void ValidateOwner(Guid userId)
+    {
+        if (SubGoal.Goal.UserId != userId)
+        {
+            throw new ForbiddenForUserException("This task does not belong to current user");
+        }
+    }
+
+    public void Delete(Guid userId)
+    {
+        ValidateOwner(userId);
+
+        Delete();
+    }
 }
