@@ -21,7 +21,6 @@
 
   <ItemGroup>
     <Folder Include="Features\Goals\MappingProfiles\" />
-    <Folder Include="Features\Goals\Queries\" />
   </ItemGroup>
 
 </Project>

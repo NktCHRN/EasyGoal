@@ -16,5 +16,8 @@ public sealed class GoalEntityConfiguration : IEntityTypeConfiguration<Goal>
         builder.HasOne<IdentityApplicationUser>()
             .WithMany()
             .HasForeignKey(f => f.UserId);
+
+        builder.HasIndex(g => new { g.CreatedAt })
+            .IsDescending(true);
     }
 }

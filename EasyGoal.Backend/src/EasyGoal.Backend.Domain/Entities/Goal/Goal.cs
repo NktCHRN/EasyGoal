@@ -11,6 +11,10 @@ public class Goal : BaseAuditableEntity
     public DateOnly Deadline { get; private set; }
     public Guid UserId { get; set; }
 
+    public int DoneTasks => SubGoals.Sum(g => g.HistoricalRecords[g.HistoricalRecords.Count - 1].CurrentDoneItems);
+    public int TotalTasks => SubGoals.Sum(g => g.HistoricalRecords[g.HistoricalRecords.Count - 1].CurrentTotalItems);
+    public decimal DoneTasksPercentage => DoneTasks / (decimal)TotalTasks;
+
     public IReadOnlyList<FileAttachment> FileAttachments => _fileAttachments.AsReadOnly();
     private readonly List<FileAttachment> _fileAttachments = [];
     public IReadOnlyList<SubGoal> SubGoals => _subGoals.AsReadOnly();
