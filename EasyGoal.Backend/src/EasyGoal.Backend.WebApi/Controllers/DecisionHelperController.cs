@@ -12,7 +12,7 @@ namespace EasyGoal.Backend.WebApi.Controllers;
 
 [ApiController]
 [Authorize]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public sealed class DecisionHelperController : BaseController
 {
     private readonly IMediator _mediator;

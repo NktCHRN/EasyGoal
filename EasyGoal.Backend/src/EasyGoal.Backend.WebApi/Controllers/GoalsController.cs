@@ -1,17 +1,20 @@
 ﻿using AutoMapper;
 using EasyGoal.Backend.Application.Features.Goals.Commands;
+using EasyGoal.Backend.Application.Features.Goals.Dto;
+using EasyGoal.Backend.Application.Features.Goals.Queries;
 using EasyGoal.Backend.WebApi.Contracts.Requests.Goals;
 using EasyGoal.Backend.WebApi.Contracts.Responses.Common;
 using EasyGoal.Backend.WebApi.Contracts.Responses.Goals;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace EasyGoal.Backend.WebApi.Controllers;
 
 [ApiController]
 [Authorize]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public sealed class GoalsController : BaseController
 {
     private readonly IMediator _mediator;
@@ -68,5 +71,24 @@ public sealed class GoalsController : BaseController
         await _mediator.Send(command);
 
         return NoContentResponse();
+    }
+
+    [HttpGet]
+    [ProducesResponseType(typeof(ApiResponse<UserGoalsResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GetUserGoals(
+        [FromQuery] string? searchText,
+        [FromQuery] int perPage,
+        [FromQuery] int page)
+    {
+        var query = new GetUserGoalsQuery(searchText, new (perPage, page));
+
+        var result = await _mediator.Send(query);
+
+        var response = _mapper.Map<UserGoalsResponse>(result);
+
+        return OkResponse(response);
     }
 }

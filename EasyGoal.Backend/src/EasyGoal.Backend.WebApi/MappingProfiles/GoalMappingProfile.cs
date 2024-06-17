@@ -14,5 +14,8 @@ public sealed class GoalMappingProfile : Profile
         CreateMap<GoalCreatedDto, GoalCreatedResponse>();
 
         CreateMap<UpdateGoalRequest, UpdateGoalCommand>();
+
+        CreateMap<UserGoalsDto, UserGoalsResponse>();
+        CreateMap<GoalShortInfoDto, GoalShortInfoResponse>();
     }
 }

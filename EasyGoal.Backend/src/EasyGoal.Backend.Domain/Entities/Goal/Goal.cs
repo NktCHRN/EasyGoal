@@ -13,7 +13,9 @@ public class Goal : BaseAuditableEntity
 
     public int DoneTasks => SubGoals.Sum(g => g.HistoricalRecords[g.HistoricalRecords.Count - 1].CurrentDoneItems);
     public int TotalTasks => SubGoals.Sum(g => g.HistoricalRecords[g.HistoricalRecords.Count - 1].CurrentTotalItems);
-    public decimal DoneTasksPercentage => DoneTasks / (decimal)TotalTasks;
+    public decimal DoneTasksPercentage => DoneTasks / (decimal)TotalTasks * 100m;
+
+    public string? FileName => string.IsNullOrEmpty(PictureLocalFileName) ? null : $"{Id}{Path.GetExtension(PictureLocalFileName)}";
 
     public IReadOnlyList<FileAttachment> FileAttachments => _fileAttachments.AsReadOnly();
     private readonly List<FileAttachment> _fileAttachments = [];

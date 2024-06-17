@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace EasyGoal.Backend.WebApi.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public sealed class AccountController : BaseController
 {
     private readonly IMediator _mediator;
