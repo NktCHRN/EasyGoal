@@ -7,7 +7,7 @@ public sealed record GoalShortInfoDto
     public string? Description { get; set; }
     public int DoneTasks { get; set; }
     public int TotalTasks { get; set; }
-    public double DoneTasksPercentage { get; set; }
+    public decimal DoneTasksPercentage { get; set; }
     public string? FileName { get; set; }
     public string? DiplayFileName { get; set; }
 }

@@ -14,6 +14,10 @@ public class Goal : BaseAuditableEntity
     public int DoneTasks => SubGoals.Sum(g => g.HistoricalRecords[g.HistoricalRecords.Count - 1].CurrentDoneItems);
     public int TotalTasks => SubGoals.Sum(g => g.HistoricalRecords[g.HistoricalRecords.Count - 1].CurrentTotalItems);
     public decimal DoneTasksPercentage => DoneTasks / (decimal)TotalTasks * 100m;
+    public decimal TasksPerDay => TotalTasks / (decimal)(DateTimeOffset.UtcNow - CreatedAt).Days;
+    public DateTimeOffset? EndDate => DoneTasks != TotalTasks 
+        ? null 
+        : SubGoals.SelectMany(s => s.HistoricalRecords).MaxBy(h => h.Date)?.Date.ToDateTime(TimeOnly.MinValue, DateTimeKind.Utc);
 
     public string? FileName => string.IsNullOrEmpty(PictureLocalFileName) ? null : $"{Id}{Path.GetExtension(PictureLocalFileName)}";
 

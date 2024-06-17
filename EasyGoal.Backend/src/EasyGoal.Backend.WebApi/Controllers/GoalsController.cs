@@ -91,4 +91,21 @@ public sealed class GoalsController : BaseController
 
         return OkResponse(response);
     }
+
+    [HttpGet("{goalId}")]
+    [ProducesResponseType(typeof(ApiResponse<GoalDetailsResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GetGoalById(Guid goalId)
+    {
+        var query = new GetGoalDetailsQuery(goalId);
+
+        var result = await _mediator.Send(query);
+
+        var response = _mapper.Map<GoalDetailsResponse>(result);
+
+        return OkResponse(response);
+    }
 }
