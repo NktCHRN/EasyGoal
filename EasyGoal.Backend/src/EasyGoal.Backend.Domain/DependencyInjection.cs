@@ -1,4 +1,4 @@
-﻿using EasyGoal.Backend.Domain.DomainEvents;
+﻿using EasyGoal.Backend.Domain.Abstractions.Utilities;
 using EasyGoal.Backend.Domain.Utilities;
 using Microsoft.Extensions.DependencyInjection;
 

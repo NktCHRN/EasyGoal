@@ -2,7 +2,7 @@
 using EasyGoal.Backend.Application.Abstractions.Presentation;
 using EasyGoal.Backend.Application.Features.DecisionHelper.Dto;
 using EasyGoal.Backend.Domain.Abstractions;
-using EasyGoal.Backend.Domain.DomainEvents;
+using EasyGoal.Backend.Domain.Abstractions.Utilities;
 using EasyGoal.Backend.Domain.Entities.DecisionHelper;
 using EasyGoal.Backend.Domain.Specifications.DecisionHelper;
 using EasyGoal.Backend.Domain.Utilities;

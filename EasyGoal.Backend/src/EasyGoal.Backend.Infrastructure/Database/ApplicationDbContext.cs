@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using EasyGoal.Backend.Domain.Entities.Task;
+using EasyGoal.Backend.Domain.Entities.History;
 
 namespace EasyGoal.Backend.Infrastructure.Database;
 public sealed class ApplicationDbContext : IdentityDbContext<IdentityApplicationUser, IdentityRole<Guid>, Guid>

@@ -1,4 +1,4 @@
-﻿using EasyGoal.Backend.Domain.DomainEvents;
+﻿using EasyGoal.Backend.Domain.Abstractions.Utilities;
 using EasyGoal.Backend.Domain.Entities.DecisionHelper;
 using EasyGoal.Backend.Domain.Exceptions;
 namespace EasyGoal.Backend.Domain.Utilities;

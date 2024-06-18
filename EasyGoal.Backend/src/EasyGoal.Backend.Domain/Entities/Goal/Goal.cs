@@ -51,11 +51,19 @@ public class Goal : BaseAuditableEntity
         Validate(userId);
     }
 
+    public SubGoal AddSubGoal(string name, DateOnly deadline, Guid userId)
+    {
+        var subGoal = SubGoal.Create(name, deadline, this, userId);
+        _subGoals.Add(subGoal);
+
+        return subGoal;
+    }
+
     private void Validate(Guid userId)
     {
         if (string.IsNullOrEmpty(Name))
         {
-            throw new EntityValidationFailedException("Criterion name must not be empty");
+            throw new EntityValidationFailedException("Goal name must not be empty");
         }
 
         ValidateOwner(userId);

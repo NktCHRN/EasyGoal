@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using EasyGoal.Backend.Application.Features.Goals.Commands;
-using EasyGoal.Backend.Application.Features.Goals.Dto;
 using EasyGoal.Backend.Application.Features.Goals.Queries;
 using EasyGoal.Backend.WebApi.Contracts.Requests.Goals;
 using EasyGoal.Backend.WebApi.Contracts.Responses.Common;
@@ -8,7 +7,6 @@ using EasyGoal.Backend.WebApi.Contracts.Responses.Goals;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace EasyGoal.Backend.WebApi.Controllers;
 
@@ -46,6 +44,7 @@ public sealed class GoalsController : BaseController
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status403Forbidden)]
     [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> UpdateGoal([FromRoute] Guid goalId, [FromBody] UpdateGoalRequest request)
@@ -62,6 +61,7 @@ public sealed class GoalsController : BaseController
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status403Forbidden)]
     [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> DeleteGoal([FromRoute] Guid goalId)
@@ -96,6 +96,7 @@ public sealed class GoalsController : BaseController
     [ProducesResponseType(typeof(ApiResponse<GoalDetailsResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status403Forbidden)]
     [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetGoalById(Guid goalId)

@@ -1,4 +1,4 @@
-﻿using EasyGoal.Backend.Domain.DomainEvents;
+﻿using EasyGoal.Backend.Domain.Abstractions.Utilities;
 
 namespace EasyGoal.Backend.Domain.Utilities;
 public sealed class VikorMCDAMethod : IMCDAMethod
