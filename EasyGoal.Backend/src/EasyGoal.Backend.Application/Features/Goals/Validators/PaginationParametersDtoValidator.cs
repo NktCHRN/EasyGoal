@@ -8,7 +8,7 @@ public class PaginationParametersDtoValidator : AbstractValidator<PaginationPara
     {
         RuleFor(p => p.PerPage)
             .GreaterThan(0)
-            .LessThan(100);
+            .LessThanOrEqualTo(100);
 
         RuleFor(p => p.Page)
             .GreaterThan(0);
