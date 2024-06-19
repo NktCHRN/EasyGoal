@@ -60,6 +60,37 @@ public class Task : BaseAuditableEntity
         AddDomainEvent(new TaskDeletedEvent(Id, SubGoalId, IsCompleted));
     }
 
+    public SubTask AddSubTask(string name)
+    {
+        var subTask = SubTask.Create(name);
+        _subTasks.Add(subTask);
+
+        return subTask;
+    }
+
+    public void UpdateSubTask(Guid id, string name)
+    {
+        var subTask = FindSubTask(id);
+        subTask.Update(name);
+    }
+
+    public void UpdateSubTaskStatus(Guid id, bool isCompleted)
+    {
+        var subTask = FindSubTask(id);
+        subTask.UpdateStatus(isCompleted);
+    }
+
+    public void DeleteSubTask(Guid id)
+    {
+        var subTask = FindSubTask(id);
+        subTask.Delete();
+    }
+
+    private SubTask FindSubTask(Guid id)
+    {
+        return SubTasks.FirstOrDefault(x => x.Id == id) ?? throw new EntityNotFoundException($"Sub-task with id {id} was not found");
+    }
+
     private void Validate()
     {
         if (string.IsNullOrEmpty(Name))

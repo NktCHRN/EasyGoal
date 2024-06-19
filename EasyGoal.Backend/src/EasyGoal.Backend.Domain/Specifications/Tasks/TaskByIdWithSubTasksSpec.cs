@@ -1,10 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Ardalis.Specification;
+using Task = EasyGoal.Backend.Domain.Entities.Task.Task;
 
 namespace EasyGoal.Backend.Domain.Specifications.Tasks;
-internal class TaskByIdWithSubTasksSpec
+public sealed class TaskByIdWithSubTasksSpec : SingleResultSpecification<Task>
 {
+    public TaskByIdWithSubTasksSpec(Guid id)
+    {
+        Query
+            .Include(t => t.SubTasks)
+            .Where(t => t.Id == id);
+    }
 }
