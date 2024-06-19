@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EasyGoal.Backend.Application.Features.Tasks.Commands;
+using EasyGoal.Backend.Application.Features.Tasks.Queries;
 using EasyGoal.Backend.WebApi.Contracts.Requests.Tasks;
 using EasyGoal.Backend.WebApi.Contracts.Responses.Common;
 using EasyGoal.Backend.WebApi.Contracts.Responses.Tasks;
@@ -23,6 +24,23 @@ public sealed class TasksController : BaseController
         _mapper = mapper;
     }
 
+    [HttpGet("~/api/sub-goals/{subGoalId}/[controller]")]
+    [ProducesResponseType(typeof(ApiResponse<TasksResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GetTasks([FromRoute] Guid subGoalId)
+    {
+        var query = new GetTasksBySubGoalIdQuery(subGoalId);
+
+        var result = await _mediator.Send(query);
+
+        var response = _mapper.Map<TasksResponse>(result);
+
+        return OkResponse(response);
+    }
+
     [HttpPost("~/api/sub-goals/{subGoalId}/[controller]")]
     [ProducesResponseType(typeof(ApiResponse<TaskCreatedResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status400BadRequest)]
@@ -38,6 +56,23 @@ public sealed class TasksController : BaseController
         var result = await _mediator.Send(command);
 
         var response = _mapper.Map<TaskCreatedResponse>(result);
+
+        return OkResponse(response);
+    }
+
+    [HttpGet("{id}")]
+    [ProducesResponseType(typeof(ApiResponse<TaskDetailsResponse>), StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GetTaskById([FromRoute] Guid id)
+    {
+        var query = new GetTaskByIdQuery(id);
+
+        var result = await _mediator.Send(query);
+
+        var response = _mapper.Map<TaskDetailsResponse>(result);
 
         return OkResponse(response);
     }

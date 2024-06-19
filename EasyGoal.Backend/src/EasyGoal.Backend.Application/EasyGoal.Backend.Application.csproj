@@ -19,9 +19,4 @@
     <ProjectReference Include="..\EasyGoal.Backend.Domain\EasyGoal.Backend.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\Tasks\MappingProfiles\" />
-    <Folder Include="Features\Tasks\Queries\" />
-  </ItemGroup>
-
 </Project>

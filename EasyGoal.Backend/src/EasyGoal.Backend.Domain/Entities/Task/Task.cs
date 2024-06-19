@@ -18,6 +18,9 @@ public class Task : BaseAuditableEntity
     private readonly List<SubTask> _subTasks = [];
     public Guid SubGoalId { get; private set; }
 
+    public int DoneSubTasks => SubTasks.Count(s => s.IsCompleted);
+    public int TotalSubTasks => SubTasks.Count;
+
     private Task() { }
 
     public static Task Create(string name, DateTimeOffset? startTime, DateTimeOffset? endTime, Guid subGoalId)
