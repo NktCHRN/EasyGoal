@@ -11,8 +11,11 @@ public sealed class TaskConfiguration : IEntityTypeConfiguration<Task>
         builder.Property(t => t.Name)
             .HasMaxLength(256);
 
-        builder.HasOne<SubGoal>()
+        builder.HasOne(t => t.SubGoal)
             .WithMany()
             .HasForeignKey(t => t.SubGoalId);
+
+        builder.HasIndex(t => new { t.StartTime, t.EndTime })
+            .HasFilter("\"IsDeleted\" = false");
     }
 }

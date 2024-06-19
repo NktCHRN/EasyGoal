@@ -1,5 +1,6 @@
 ﻿using EasyGoal.Backend.Domain.Abstractions.Entities;
 using EasyGoal.Backend.Domain.DomainEvents;
+using EasyGoal.Backend.Domain.Entities.Goal;
 using EasyGoal.Backend.Domain.Enums;
 using EasyGoal.Backend.Domain.Exceptions;
 
@@ -17,6 +18,7 @@ public class Task : BaseAuditableEntity
     public IReadOnlyList<SubTask> SubTasks => _subTasks.AsReadOnly();
     private readonly List<SubTask> _subTasks = [];
     public Guid SubGoalId { get; private set; }
+    public SubGoal SubGoal { get; private set; } = null!;
 
     public int DoneSubTasks => SubTasks.Count(s => s.IsCompleted);
     public int TotalSubTasks => SubTasks.Count;

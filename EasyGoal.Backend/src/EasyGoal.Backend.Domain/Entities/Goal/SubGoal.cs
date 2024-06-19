@@ -9,6 +9,7 @@ public class SubGoal : BaseAuditableEntity
     public DateOnly Deadline { get; private set; }
 
     public Guid GoalId { get; private set; }
+    public Goal Goal { get; private set; } = null!;
 
     public IReadOnlyList<HistoricalRecord> HistoricalRecords => _historicalRecords.AsReadOnly();
     private readonly List<HistoricalRecord> _historicalRecords = [];

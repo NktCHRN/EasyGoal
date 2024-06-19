@@ -10,7 +10,7 @@ public sealed class SubGoalEntityConfiguration : IEntityTypeConfiguration<SubGoa
         builder.Property(s => s.Name)
             .HasMaxLength(256);
 
-        builder.HasOne<Goal>()
+        builder.HasOne(s => s.Goal)
             .WithMany(g => g.SubGoals)
             .HasForeignKey(t => t.GoalId);
     }
