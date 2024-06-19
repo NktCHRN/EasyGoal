@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AutoMapper;
+using EasyGoal.Backend.Application.Features.SubGoals.Dto;
 
 namespace EasyGoal.Backend.Application.Features.SubGoals.MappingProfiles;
-internal class SubGoalMappingProfile
+public class SubGoalMappingProfile : Profile
 {
+    public SubGoalMappingProfile()
+    {
+        CreateMap<SubGoalMappingProfile, SubGoalDto>();
+    }
 }

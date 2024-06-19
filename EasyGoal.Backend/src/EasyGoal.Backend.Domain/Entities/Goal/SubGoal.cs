@@ -16,6 +16,9 @@ public class SubGoal : BaseAuditableEntity
     public IReadOnlyList<Task.Task> Tasks => _tasks.AsReadOnly();
     private readonly List<Task.Task> _tasks = [];
 
+    public int DoneTasks => HistoricalRecords.OrderByDescending(h => h.Date).First().CurrentDoneItems;
+    public int TotalTasks => HistoricalRecords.OrderByDescending(h => h.Date).First().CurrentTotalItems;
+
     private SubGoal() { }
 
     internal static SubGoal Create(string name, DateOnly deadline)

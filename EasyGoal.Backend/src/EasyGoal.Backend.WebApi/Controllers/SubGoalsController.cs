@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EasyGoal.Backend.Application.Features.SubGoals.Commands;
+using EasyGoal.Backend.Application.Features.SubGoals.Queries;
 using EasyGoal.Backend.WebApi.Contracts.Requests.SubGoals;
 using EasyGoal.Backend.WebApi.Contracts.Responses.Common;
 using EasyGoal.Backend.WebApi.Contracts.Responses.SubGoals;
@@ -21,6 +22,41 @@ public sealed class SubGoalsController : BaseController
     {
         _mediator = mediator;
         _mapper = mapper;
+    }
+
+    [HttpGet]
+    [ProducesResponseType(typeof(ApiResponse<SubGoalsResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GetSubGoals([FromRoute] Guid goalId)
+    {
+        var query = new GetSubGoalsByGoalIdQuery(goalId);
+
+        var result = await _mediator.Send(query);
+
+        var response = _mapper.Map<SubGoalsResponse>(result);
+
+        return OkResponse(response);
+    }
+
+    [HttpGet("{id}")]
+    [ProducesResponseType(typeof(ApiResponse<SubGoalResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GetSubGoalById([FromRoute] Guid goalId, [FromRoute] Guid id)
+    {
+        var query = new GetSubGoalByIdQuery(goalId, id);
+
+        var result = await _mediator.Send(query);
+
+        var response = _mapper.Map<SubGoalResponse>(result);
+
+        return OkResponse(response);
     }
 
     [HttpPost]

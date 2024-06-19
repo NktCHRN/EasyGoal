@@ -12,8 +12,8 @@ public class Goal : BaseAuditableEntity
     public DateOnly Deadline { get; private set; }
     public Guid UserId { get; set; }
 
-    public int DoneTasks => SubGoals.Sum(g => g.HistoricalRecords[g.HistoricalRecords.Count - 1].CurrentDoneItems);
-    public int TotalTasks => SubGoals.Sum(g => g.HistoricalRecords[g.HistoricalRecords.Count - 1].CurrentTotalItems);
+    public int DoneTasks => SubGoals.Sum(g => g.DoneTasks);
+    public int TotalTasks => SubGoals.Sum(g => g.TotalTasks);
     public decimal DoneTasksPercentage => DoneTasks / (decimal)TotalTasks * 100m;
     public decimal TasksPerDay => TotalTasks / (decimal)(DateTimeOffset.UtcNow - CreatedAt).Days;
     public DateTimeOffset? EndDate => DoneTasks != TotalTasks 
@@ -79,7 +79,7 @@ public class Goal : BaseAuditableEntity
     {
         ValidateOwner(userId);
 
-        var subGoal = SubGoals.FirstOrDefault(x => x.Id == id) ?? throw new EntityNotFoundException($"Sub goal with id {id} was not found");
+        var subGoal = SubGoals.FirstOrDefault(x => x.Id == id) ?? throw new EntityNotFoundException($"Sub-goal with id {id} was not found");
         subGoal.Update(name, deadline);
     }
 
@@ -87,7 +87,7 @@ public class Goal : BaseAuditableEntity
     {
         ValidateOwner(userId);
 
-        var subGoal = SubGoals.FirstOrDefault(x => x.Id == id) ?? throw new EntityNotFoundException($"Sub goal with id {id} was not found");
+        var subGoal = SubGoals.FirstOrDefault(x => x.Id == id) ?? throw new EntityNotFoundException($"Sub-goal with id {id} was not found");
         DeleteSubGoalInternal(subGoal);
     }
 
