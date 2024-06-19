@@ -37,9 +37,21 @@ public class Task : BaseAuditableEntity
         return task;
     }
 
+    public void Update(string name, DateTimeOffset? startTime, DateTimeOffset? endTime, string? notes)
+    {
+        Name = name;
+        StartTime = startTime;
+        EndTime = endTime;
+        Notes = notes;
+
+        Validate();
+    }
+
     public new void Delete()
     {
         base.Delete();
+
+        AddDomainEvent(new TaskDeletedEvent(Id, SubGoalId, IsCompleted));
     }
 
     private void Validate()
