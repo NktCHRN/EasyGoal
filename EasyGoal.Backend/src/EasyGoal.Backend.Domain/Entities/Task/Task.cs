@@ -47,6 +47,12 @@ public class Task : BaseAuditableEntity
         Validate();
     }
 
+    public void UpdateStatus(bool isCompleted)
+    {
+        IsCompleted = isCompleted;
+        AddDomainEvent(new TaskStatusUpdatedEvent(Id, SubGoalId, IsCompleted));
+    }
+
     public new void Delete()
     {
         base.Delete();
