@@ -140,34 +140,6 @@ namespace EasyGoal.Backend.Infrastructure.Database.Migrations
                     b.ToTable("Goals");
                 });
 
-            modelBuilder.Entity("EasyGoal.Backend.Domain.Entities.Goal.HistoricalRecord", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("CurrentDoneItems")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("CurrentTotalItems")
-                        .HasColumnType("integer");
-
-                    b.Property<DateOnly>("Date")
-                        .HasColumnType("date");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
-                    b.Property<Guid>("SubGoalId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SubGoalId");
-
-                    b.ToTable("HistoricalRecords");
-                });
-
             modelBuilder.Entity("EasyGoal.Backend.Domain.Entities.Goal.SubGoal", b =>
                 {
                     b.Property<Guid>("Id")
@@ -207,6 +179,34 @@ namespace EasyGoal.Backend.Infrastructure.Database.Migrations
                     b.HasIndex("GoalId");
 
                     b.ToTable("SubGoals");
+                });
+
+            modelBuilder.Entity("EasyGoal.Backend.Domain.Entities.History.HistoricalRecord", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("CurrentDoneItems")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("CurrentTotalItems")
+                        .HasColumnType("integer");
+
+                    b.Property<DateOnly>("Date")
+                        .HasColumnType("date");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid>("SubGoalId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SubGoalId");
+
+                    b.ToTable("HistoricalRecords");
                 });
 
             modelBuilder.Entity("EasyGoal.Backend.Domain.Entities.Task.SubTask", b =>
@@ -564,7 +564,16 @@ namespace EasyGoal.Backend.Infrastructure.Database.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("EasyGoal.Backend.Domain.Entities.Goal.HistoricalRecord", b =>
+            modelBuilder.Entity("EasyGoal.Backend.Domain.Entities.Goal.SubGoal", b =>
+                {
+                    b.HasOne("EasyGoal.Backend.Domain.Entities.Goal.Goal", null)
+                        .WithMany("SubGoals")
+                        .HasForeignKey("GoalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("EasyGoal.Backend.Domain.Entities.History.HistoricalRecord", b =>
                 {
                     b.HasOne("EasyGoal.Backend.Domain.Entities.Goal.SubGoal", "SubGoal")
                         .WithMany("HistoricalRecords")
@@ -575,37 +584,22 @@ namespace EasyGoal.Backend.Infrastructure.Database.Migrations
                     b.Navigation("SubGoal");
                 });
 
-            modelBuilder.Entity("EasyGoal.Backend.Domain.Entities.Goal.SubGoal", b =>
-                {
-                    b.HasOne("EasyGoal.Backend.Domain.Entities.Goal.Goal", "Goal")
-                        .WithMany("SubGoals")
-                        .HasForeignKey("GoalId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Goal");
-                });
-
             modelBuilder.Entity("EasyGoal.Backend.Domain.Entities.Task.SubTask", b =>
                 {
-                    b.HasOne("EasyGoal.Backend.Domain.Entities.Task.Task", "Task")
+                    b.HasOne("EasyGoal.Backend.Domain.Entities.Task.Task", null)
                         .WithMany("SubTasks")
                         .HasForeignKey("TaskId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Task");
                 });
 
             modelBuilder.Entity("EasyGoal.Backend.Domain.Entities.Task.Task", b =>
                 {
-                    b.HasOne("EasyGoal.Backend.Domain.Entities.Goal.SubGoal", "SubGoal")
-                        .WithMany("Tasks")
+                    b.HasOne("EasyGoal.Backend.Domain.Entities.Goal.SubGoal", null)
+                        .WithMany()
                         .HasForeignKey("SubGoalId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("SubGoal");
                 });
 
             modelBuilder.Entity("EasyGoal.Backend.Infrastructure.Identity.RefreshToken", b =>
@@ -680,8 +674,6 @@ namespace EasyGoal.Backend.Infrastructure.Database.Migrations
             modelBuilder.Entity("EasyGoal.Backend.Domain.Entities.Goal.SubGoal", b =>
                 {
                     b.Navigation("HistoricalRecords");
-
-                    b.Navigation("Tasks");
                 });
 
             modelBuilder.Entity("EasyGoal.Backend.Domain.Entities.Task.Task", b =>

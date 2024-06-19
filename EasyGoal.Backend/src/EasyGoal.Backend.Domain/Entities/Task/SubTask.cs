@@ -7,5 +7,4 @@ public class SubTask : BaseEntity
     public bool IsCompleted { get; private set; }
 
     public Guid TaskId { get; private set; }
-    public Task Task { get; private set; } = null!;
 }

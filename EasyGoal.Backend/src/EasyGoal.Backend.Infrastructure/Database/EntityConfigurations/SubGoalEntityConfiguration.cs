@@ -9,5 +9,9 @@ public sealed class SubGoalEntityConfiguration : IEntityTypeConfiguration<SubGoa
     {
         builder.Property(s => s.Name)
             .HasMaxLength(256);
+
+        builder.HasOne<Goal>()
+            .WithMany(g => g.SubGoals)
+            .HasForeignKey(t => t.GoalId);
     }
 }

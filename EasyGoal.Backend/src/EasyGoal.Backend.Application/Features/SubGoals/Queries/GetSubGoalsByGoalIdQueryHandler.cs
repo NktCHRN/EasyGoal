@@ -12,20 +12,23 @@ public sealed class GetSubGoalsByGoalIdQueryHandler : IRequestHandler<GetSubGoal
     private readonly IRepository<SubGoal> _subGoalRepository;
     private readonly ICurrentApplicationUser _currentApplicationUser;
     private readonly IMapper _mapper;
+    private readonly IRepository<Goal> _goalRepository;
 
-    public GetSubGoalsByGoalIdQueryHandler(IRepository<SubGoal> subGoalRepository, ICurrentApplicationUser currentApplicationUser, IMapper mapper)
+    public GetSubGoalsByGoalIdQueryHandler(IRepository<SubGoal> subGoalRepository, ICurrentApplicationUser currentApplicationUser, IMapper mapper, IRepository<Goal> goalRepository)
     {
         _subGoalRepository = subGoalRepository;
         _currentApplicationUser = currentApplicationUser;
         _mapper = mapper;
+        _goalRepository = goalRepository;
     }
 
     public async Task<SubGoalsDto> Handle(GetSubGoalsByGoalIdQuery request, CancellationToken cancellationToken)
     {
         var userId = _currentApplicationUser.GetValidatedId();
         var subGoals = await _subGoalRepository.ListAsync(new SubGoalsByGoalIdAsNoTrackingSpec(request.GoalId), cancellationToken);
+        var goal = await _goalRepository.FirstOrDefaultAsync(new GoalForOwnerValidationSpec(request.GoalId), cancellationToken);
 
-        subGoals.FirstOrDefault()?.Goal.ValidateOwner(userId);
+        goal?.ValidateOwner(userId);
 
         return new SubGoalsDto(_mapper.Map<IReadOnlyList<SubGoalDto>>(subGoals));
     }

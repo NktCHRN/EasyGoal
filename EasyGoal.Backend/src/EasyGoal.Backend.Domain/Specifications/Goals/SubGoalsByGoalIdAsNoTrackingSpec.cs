@@ -8,7 +8,6 @@ public sealed class SubGoalsByGoalIdAsNoTrackingSpec : Specification<SubGoal>
     {
         Query
             .AsNoTracking()
-            .Include(s => s.Goal)
             .Include(s => s.HistoricalRecords.OrderByDescending(h => h.Id).Take(1))
             .Where(s => s.GoalId == goalId);
     }

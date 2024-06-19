@@ -9,12 +9,9 @@ public class SubGoal : BaseAuditableEntity
     public DateOnly Deadline { get; private set; }
 
     public Guid GoalId { get; private set; }
-    public Goal Goal { get; private set; } = null!;
 
     public IReadOnlyList<HistoricalRecord> HistoricalRecords => _historicalRecords.AsReadOnly();
     private readonly List<HistoricalRecord> _historicalRecords = [];
-    public IReadOnlyList<Task.Task> Tasks => _tasks.AsReadOnly();
-    private readonly List<Task.Task> _tasks = [];
 
     public int DoneTasks => HistoricalRecords.OrderByDescending(h => h.Date).First().CurrentDoneItems;
     public int TotalTasks => HistoricalRecords.OrderByDescending(h => h.Date).First().CurrentTotalItems;
