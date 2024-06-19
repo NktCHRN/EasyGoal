@@ -7,23 +7,23 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 
 namespace EasyGoal.Backend.Application.Features.Tasks.EventHandlers;
-public sealed class TaskCreatedEventHandler : INotificationHandler<TaskCreatedEvent>
+public sealed class TaskDeletedEventHandler : INotificationHandler<TaskDeletedEvent>
 {
     private readonly IRepository<HistoricalRecord> _historicalRecordRepository;
-    private readonly ILogger<TaskCreatedEventHandler> _logger;
+    private readonly ILogger<TaskDeletedEvent> _logger;
 
-    public TaskCreatedEventHandler(IRepository<HistoricalRecord> historicalRecordRepository, ILogger<TaskCreatedEventHandler> logger)
+    public TaskDeletedEventHandler(IRepository<HistoricalRecord> historicalRecordRepository, ILogger<TaskDeletedEvent> logger)
     {
         _historicalRecordRepository = historicalRecordRepository;
         _logger = logger;
     }
 
-    public async Task Handle(TaskCreatedEvent notification, CancellationToken cancellationToken)
+    public async Task Handle(TaskDeletedEvent notification, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Task {Event} was created.", notification);
+        _logger.LogInformation("Task {Event} was deleted.", notification);
 
         var initialHistoricalRecord = await _historicalRecordRepository.FirstOrDefaultAsync(
-            new NewestHistoricalRecordBySubGoalIdSpec(notification.SubGoalId), 
+            new NewestHistoricalRecordBySubGoalIdSpec(notification.SubGoalId),
             cancellationToken) ?? throw new EntityNotFoundException($"No historical records were found for sub goal {notification.SubGoalId}");
 
         var historicalRecord = initialHistoricalRecord.CreateOrUpdateByCurrentDate();
@@ -33,8 +33,8 @@ public sealed class TaskCreatedEventHandler : INotificationHandler<TaskCreatedEv
             _historicalRecordRepository.AddAsUnsaved(historicalRecord);
         }
 
-        historicalRecord.AddItem();
+        historicalRecord.RemoveItem(notification.IsCompleted);
 
-        _logger.LogInformation("Task {Event} was created. Historical record has been updated {HistoricalRecord}.", notification, historicalRecord);
+        _logger.LogInformation("Task {Event} was deleted. Historical record has been updated {HistoricalRecord}.", notification, historicalRecord);
     }
 }

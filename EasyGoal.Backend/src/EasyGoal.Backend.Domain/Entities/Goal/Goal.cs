@@ -78,8 +78,7 @@ public class Goal : BaseAuditableEntity
     public void UpdateSubGoal(Guid id, string name, DateOnly deadline, Guid userId)
     {
         ValidateOwner(userId);
-
-        var subGoal = SubGoals.FirstOrDefault(x => x.Id == id) ?? throw new EntityNotFoundException($"Sub-goal with id {id} was not found");
+        SubGoal subGoal = FindSubGoal(id);
         subGoal.Update(name, deadline);
     }
 
@@ -87,8 +86,13 @@ public class Goal : BaseAuditableEntity
     {
         ValidateOwner(userId);
 
-        var subGoal = SubGoals.FirstOrDefault(x => x.Id == id) ?? throw new EntityNotFoundException($"Sub-goal with id {id} was not found");
+        var subGoal = FindSubGoal(id);
         DeleteSubGoalInternal(subGoal);
+    }
+
+    private SubGoal FindSubGoal(Guid id)
+    {
+        return SubGoals.FirstOrDefault(x => x.Id == id) ?? throw new EntityNotFoundException($"Sub-goal with id {id} was not found");
     }
 
     private void DeleteSubGoalInternal(SubGoal subGoal)

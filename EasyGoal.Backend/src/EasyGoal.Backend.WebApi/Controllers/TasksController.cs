@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EasyGoal.Backend.Application.Features.SubGoals.Commands;
 using EasyGoal.Backend.Application.Features.Tasks.Commands;
 using EasyGoal.Backend.WebApi.Contracts.Requests.Tasks;
 using EasyGoal.Backend.WebApi.Contracts.Responses.Common;
@@ -53,6 +54,22 @@ public sealed class TasksController : BaseController
     {
         var command = _mapper.Map<UpdateTaskCommand>(request);
         command.Id = id;
+
+        await _mediator.Send(command);
+
+        return NoContent();
+    }
+
+    [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> DeleteTask([FromRoute] Guid id)
+    {
+        var command = new DeleteTaskCommand(id);
 
         await _mediator.Send(command);
 

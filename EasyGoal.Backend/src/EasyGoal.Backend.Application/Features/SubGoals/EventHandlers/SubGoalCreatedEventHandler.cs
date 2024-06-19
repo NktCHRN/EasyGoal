@@ -18,10 +18,12 @@ public sealed class SubGoalCreatedEventHandler : INotificationHandler<SubGoalCre
 
     public Task Handle(SubGoalCreatedEvent notification, CancellationToken cancellationToken)
     {
+        _logger.LogInformation("SubGoal {Event} was created.", notification);
+
         var historicalRecord = HistoricalRecord.Create(notification.SubGoalId);
         _historicalRecordRepository.AddAsUnsaved(historicalRecord);
 
-        _logger.LogInformation("SubGoal {SubGoalId} was created. First historical record has been added {HistoricalRecord}.", notification.SubGoalId, historicalRecord);
+        _logger.LogInformation("SubGoal {Event} was created. First historical record has been added {HistoricalRecord}.", notification, historicalRecord);
 
         return Task.CompletedTask;
     }
