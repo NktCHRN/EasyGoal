@@ -11,24 +11,51 @@ public class HistoricalRecord : BaseEntity
     public Guid SubGoalId { get; private set; }
     public SubGoal SubGoal { get; private set; } = null!;
 
+    private static readonly DateOnly CurrentDate = DateOnly.FromDateTime(DateTime.UtcNow);
+
     private HistoricalRecord() { }
 
     public static HistoricalRecord Create(Guid subGoalId)
     {
         return new HistoricalRecord
         {
-            Date = DateOnly.FromDateTime(DateTime.UtcNow),
+            Date = CurrentDate,
             SubGoalId = subGoalId,
         };
     }
 
-    public void AddNewItem()
+    public HistoricalRecord CreateOrUpdateByCurrentDate()
+    {
+        if (Date == CurrentDate)
+        {
+            return this;
+        }
+
+        return Create(SubGoalId);
+    }
+
+    public void AddItem()
     {
         CurrentTotalItems++;
     }
 
-    public void AddDoneItem()
+    public void DoItem()
     {
         CurrentDoneItems++;
+    }
+
+    public void UndoItem()
+    {
+        CurrentDoneItems--;
+    }
+
+    public void RemoveItem(bool isDone)
+    {
+        if (isDone)
+        {
+            CurrentDoneItems--;
+        }
+
+        CurrentTotalItems--;
     }
 }

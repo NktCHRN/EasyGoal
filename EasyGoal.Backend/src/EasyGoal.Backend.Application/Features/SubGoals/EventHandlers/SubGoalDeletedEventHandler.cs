@@ -21,6 +21,7 @@ public sealed class SubGoalDeletedEventHandler : INotificationHandler<SubGoalDel
         foreach (var task in tasks)
         {
             task.Delete();
+            task.ClearDomainEvents();   // Ignore new events in the event handler.
         }
     }
 }
