@@ -4,59 +4,70 @@ using EasyGoal.Backend.Domain.Entities.Goal;
 namespace EasyGoal.Backend.Domain.Entities.History;
 public class HistoricalRecord : BaseEntity
 {
-    public DateOnly Date { get; private set; }
+    public DateTimeOffset DateTime { get; private set; }
     public int CurrentDoneItems { get; private set; }
     public int CurrentTotalItems { get; private set; }
 
     public Guid SubGoalId { get; private set; }
     public SubGoal SubGoal { get; private set; } = null!;
-    public uint Version { get; set; }
-
-    private static readonly DateOnly CurrentDate = DateOnly.FromDateTime(DateTime.UtcNow);
 
     private HistoricalRecord() { }
 
-    public static HistoricalRecord Create(Guid subGoalId)
+    public static HistoricalRecord Create(DateTimeOffset dateTime, Guid subGoalId)
     {
         return new HistoricalRecord
         {
-            Date = CurrentDate,
+            DateTime = dateTime,
             SubGoalId = subGoalId,
         };
     }
 
-    public HistoricalRecord CreateOrUpdateByCurrentDate()
+    public HistoricalRecord AddItem(DateTimeOffset dateTime)
     {
-        if (Date == CurrentDate)
-        {
-            return this;
-        }
+        var record = CreateFromCurrent(dateTime);
+        record.CurrentTotalItems++;
 
-        return Create(SubGoalId);
+        return record;
     }
 
-    public void AddItem()
+    public HistoricalRecord DoItem(DateTimeOffset dateTime)
     {
-        CurrentTotalItems++;
+        var record = CreateFromCurrent(dateTime);
+        record.CurrentDoneItems++;
+
+        return record;
     }
 
-    public void DoItem()
+    public HistoricalRecord UndoItem(DateTimeOffset dateTime)
     {
-        CurrentDoneItems++;
+        var record = CreateFromCurrent(dateTime);
+        record.CurrentDoneItems--;
+
+        return record;
     }
 
-    public void UndoItem()
+    public HistoricalRecord RemoveItem(DateTimeOffset dateTime, bool isDone)
     {
-        CurrentDoneItems--;
-    }
+        var record = CreateFromCurrent(dateTime);
 
-    public void RemoveItem(bool isDone)
-    {
         if (isDone)
         {
-            CurrentDoneItems--;
+            record.CurrentDoneItems--;
         }
 
-        CurrentTotalItems--;
+        record.CurrentTotalItems--;
+
+        return record;
+    }
+
+    private HistoricalRecord CreateFromCurrent(DateTimeOffset dateTime)
+    {
+        return new HistoricalRecord
+        {
+            DateTime = dateTime,
+            SubGoalId = SubGoalId,
+            CurrentDoneItems = CurrentDoneItems,
+            CurrentTotalItems = CurrentTotalItems,
+        };
     }
 }

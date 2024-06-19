@@ -2,18 +2,18 @@
 using EasyGoal.Backend.Domain.Abstractions;
 
 namespace EasyGoal.Backend.Infrastructure.Database;
-public sealed class GenericRepository<T> : RepositoryBase<T>, IRepository<T> where T : class
+public class GenericRepository<T> : RepositoryBase<T>, IRepository<T> where T : class
 {
-    private readonly ApplicationDbContext _applicationDbContext;
+    protected readonly ApplicationDbContext ApplicationDbContext;
 
     public GenericRepository(ApplicationDbContext applicationDbContext) : base(applicationDbContext)
     {
-        _applicationDbContext = applicationDbContext;
+        ApplicationDbContext = applicationDbContext;
     }
 
     public T AddAsUnsaved(T entity)
     {
-        _applicationDbContext.Set<T>().Add(entity);
+        ApplicationDbContext.Set<T>().Add(entity);
 
         return entity;
     }

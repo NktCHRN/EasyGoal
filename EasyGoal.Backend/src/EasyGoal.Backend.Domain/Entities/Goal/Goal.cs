@@ -18,7 +18,7 @@ public class Goal : BaseAuditableEntity
     public decimal TasksPerDay => TotalTasks / (decimal)(DateTimeOffset.UtcNow - CreatedAt).Days;
     public DateTimeOffset? EndDate => DoneTasks != TotalTasks 
         ? null 
-        : SubGoals.SelectMany(s => s.HistoricalRecords).MaxBy(h => h.Date)?.Date.ToDateTime(TimeOnly.MinValue, DateTimeKind.Utc);
+        : SubGoals.SelectMany(s => s.HistoricalRecords).MaxBy(h => h.DateTime)?.DateTime;
 
     public string? FileName => string.IsNullOrEmpty(PictureLocalFileName) ? null : $"{Id}{Path.GetExtension(PictureLocalFileName)}";
 

@@ -57,6 +57,7 @@ public static class DependencyInjection
                             .UseNpgsql(configuration.GetConnectionString("ApplicationDbConnection"))
                             .AddInterceptors(sp.GetRequiredService<SoftDeleteInterceptor>(), sp.GetRequiredService<AuditableInterceptor>(), sp.GetRequiredService<DispatchDomainEventsInterceptor>()))
                     .AddScoped<ITransactionProvider, TransactionProvider>()
-                    .AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
+                    .AddScoped(typeof(IRepository<>), typeof(GenericRepository<>))
+                    .AddScoped<IHistoryRepository, HistoryRepository>();
     }
 }

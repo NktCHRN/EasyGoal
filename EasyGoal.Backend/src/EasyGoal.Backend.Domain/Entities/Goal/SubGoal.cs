@@ -14,8 +14,8 @@ public class SubGoal : BaseAuditableEntity
     public IReadOnlyList<HistoricalRecord> HistoricalRecords => _historicalRecords.AsReadOnly();
     private readonly List<HistoricalRecord> _historicalRecords = [];
 
-    public int DoneTasks => HistoricalRecords.OrderByDescending(h => h.Date).First().CurrentDoneItems;
-    public int TotalTasks => HistoricalRecords.OrderByDescending(h => h.Date).First().CurrentTotalItems;
+    public int DoneTasks => HistoricalRecords.OrderByDescending(h => h.DateTime).First().CurrentDoneItems;
+    public int TotalTasks => HistoricalRecords.OrderByDescending(h => h.DateTime).First().CurrentTotalItems;
 
     private SubGoal() { }
 
