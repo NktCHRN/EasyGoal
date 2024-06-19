@@ -8,7 +8,9 @@ public sealed class HistoricalRecordConfiguration : IEntityTypeConfiguration<His
     public void Configure(EntityTypeBuilder<HistoricalRecord> builder)
     {
         builder.HasIndex(h => new { h.SubGoalId, h.Date })
-            .IsDescending(false, true);
+            .IsDescending(false, true)
+            .IsUnique()
+            .HasFilter("\"IsDeleted\" = false");
 
         builder.Property(h => h.Version)
             .IsRowVersion();
