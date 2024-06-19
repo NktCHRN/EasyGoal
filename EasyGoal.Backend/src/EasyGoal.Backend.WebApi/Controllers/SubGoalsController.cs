@@ -11,7 +11,7 @@ namespace EasyGoal.Backend.WebApi.Controllers;
 
 [ApiController]
 [Authorize]
-[Route("api")]
+[Route("api/goals/{goalId}/[controller]")]
 public sealed class SubGoalsController : BaseController
 {
     private readonly IMediator _mediator;
@@ -23,14 +23,14 @@ public sealed class SubGoalsController : BaseController
         _mapper = mapper;
     }
 
-    [HttpPost("goals/{goalId}/[controller]")]
+    [HttpPost]
     [ProducesResponseType(typeof(ApiResponse<SubGoalCreatedResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status403Forbidden)]
     [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> CreateGoal([FromRoute] Guid goalId, [FromBody] CreateSubGoalRequest request)
+    public async Task<IActionResult> CreateSubGoal([FromRoute] Guid goalId, [FromBody] CreateSubGoalRequest request)
     {
         var command = _mapper.Map<CreateSubGoalCommand>(request);
         command.GoalId = goalId;
@@ -40,5 +40,43 @@ public sealed class SubGoalsController : BaseController
         var response = _mapper.Map<SubGoalCreatedResponse>(result);
 
         return OkResponse(response);
+    }
+
+    [HttpPut("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> UpdateSubGoal([FromRoute] Guid goalId, [FromRoute] Guid id, [FromBody] UpdateSubGoalRequest request)
+    {
+        var command = _mapper.Map<UpdateSubGoalCommand>(request);
+        command.GoalId = goalId;
+        command.Id = id;
+
+        await _mediator.Send(command);
+
+        return NoContent();
+    }
+
+    [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> DeleteSubGoal([FromRoute] Guid goalId, [FromRoute] Guid id)
+    {
+        var command = new DeleteSubGoalCommand
+        {
+            GoalId = goalId,
+            Id = id
+        };
+
+        await _mediator.Send(command);
+
+        return NoContent();
     }
 }

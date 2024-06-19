@@ -1,4 +1,5 @@
 ﻿using EasyGoal.Backend.Domain.Abstractions.Entities;
+using EasyGoal.Backend.Domain.DomainEvents;
 using EasyGoal.Backend.Domain.Entities.Common;
 using EasyGoal.Backend.Domain.Exceptions;
 
@@ -51,12 +52,49 @@ public class Goal : BaseAuditableEntity
         Validate(userId);
     }
 
+    public void Delete(Guid userId)
+    {
+        ValidateOwner(userId);
+
+        foreach (var subGoal in SubGoals)
+        {
+            DeleteSubGoalInternal(subGoal);
+        }
+
+        base.Delete();
+    }
+
     public SubGoal AddSubGoal(string name, DateOnly deadline, Guid userId)
     {
-        var subGoal = SubGoal.Create(name, deadline, this, userId);
+        ValidateOwner(userId);
+
+        var subGoal = SubGoal.Create(name, deadline);
         _subGoals.Add(subGoal);
+        AddDomainEvent(new SubGoalCreatedEvent(subGoal.Id));
 
         return subGoal;
+    }
+
+    public void UpdateSubGoal(Guid id, string name, DateOnly deadline, Guid userId)
+    {
+        ValidateOwner(userId);
+
+        var subGoal = SubGoals.FirstOrDefault(x => x.Id == id) ?? throw new EntityNotFoundException($"Sub goal with id {id} was not found");
+        subGoal.Update(name, deadline);
+    }
+
+    public void DeleteSubGoal(Guid id, Guid userId)
+    {
+        ValidateOwner(userId);
+
+        var subGoal = SubGoals.FirstOrDefault(x => x.Id == id) ?? throw new EntityNotFoundException($"Sub goal with id {id} was not found");
+        DeleteSubGoalInternal(subGoal);
+    }
+
+    private void DeleteSubGoalInternal(SubGoal subGoal)
+    {
+        subGoal.Delete();
+        AddDomainEvent(new SubGoalDeletedEvent(subGoal.Id));
     }
 
     private void Validate(Guid userId)
@@ -75,17 +113,5 @@ public class Goal : BaseAuditableEntity
         {
             throw new ForbiddenForUserException("This goal does not belong to current user");
         }
-    }
-
-    public void Delete(Guid userId)
-    {
-        ValidateOwner(userId);
-
-        foreach (var subGoal in SubGoals)
-        {
-            subGoal.Delete(userId);
-        }
-
-        Delete();
     }
 }

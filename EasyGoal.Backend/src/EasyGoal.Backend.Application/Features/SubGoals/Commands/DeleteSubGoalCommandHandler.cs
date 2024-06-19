@@ -1,5 +1,4 @@
 ﻿using EasyGoal.Backend.Application.Abstractions.Presentation;
-using EasyGoal.Backend.Application.Features.SubGoals.Dto;
 using EasyGoal.Backend.Domain.Abstractions;
 using EasyGoal.Backend.Domain.Entities.Goal;
 using EasyGoal.Backend.Domain.Exceptions;
@@ -7,27 +6,25 @@ using EasyGoal.Backend.Domain.Specifications.Goals;
 using MediatR;
 
 namespace EasyGoal.Backend.Application.Features.SubGoals.Commands;
-public sealed class CreateSubGoalCommandHandler : IRequestHandler<CreateSubGoalCommand, SubGoalCreatedDto>
+public sealed class DeleteSubGoalCommandHandler : IRequestHandler<DeleteSubGoalCommand>
 {
-    private readonly ICurrentApplicationUser _currentApplicationUser;
     private readonly IRepository<Goal> _goalRepository;
+    private readonly ICurrentApplicationUser _currentApplicationUser;
 
-    public CreateSubGoalCommandHandler(ICurrentApplicationUser currentApplicationUser, IRepository<Goal> goalRepository)
+    public DeleteSubGoalCommandHandler(IRepository<Goal> goalRepository, ICurrentApplicationUser currentApplicationUser)
     {
-        _currentApplicationUser = currentApplicationUser;
         _goalRepository = goalRepository;
+        _currentApplicationUser = currentApplicationUser;
     }
 
-    public async Task<SubGoalCreatedDto> Handle(CreateSubGoalCommand request, CancellationToken cancellationToken)
+    public async Task Handle(DeleteSubGoalCommand request, CancellationToken cancellationToken)
     {
         var userId = _currentApplicationUser.GetValidatedId();
         var goal = await _goalRepository.FirstOrDefaultAsync(new GoalByIdWithSubGoalsSpec(request.GoalId), cancellationToken)
             ?? throw new EntityNotFoundException($"Goal with id {request.GoalId} was not found");
 
-        var subGoal = goal.AddSubGoal(request.Name, request.Deadline, userId);
+        goal.DeleteSubGoal(request.Id, userId);
 
         await _goalRepository.SaveChangesAsync(cancellationToken);
-
-        return new SubGoalCreatedDto(subGoal.Id);
     }
 }

@@ -12,5 +12,7 @@ public sealed class SubGoalMappingProfile : Profile
     {
         CreateMap<CreateSubGoalRequest, CreateSubGoalCommand>();
         CreateMap<SubGoalCreatedDto, SubGoalCreatedResponse>();
+        
+        CreateMap<UpdateSubGoalRequest, UpdateSubGoalCommand>();
     }
 }

@@ -1,5 +1,4 @@
 ﻿using EasyGoal.Backend.Domain.Abstractions.Entities;
-using EasyGoal.Backend.Domain.DomainEvents;
 using EasyGoal.Backend.Domain.Entities.History;
 using EasyGoal.Backend.Domain.Exceptions;
 
@@ -19,47 +18,31 @@ public class SubGoal : BaseAuditableEntity
 
     private SubGoal() { }
 
-    internal static SubGoal Create(string name, DateOnly deadline, Goal goal, Guid userId)
+    internal static SubGoal Create(string name, DateOnly deadline)
     {
         var subGoal = new SubGoal
         {
             Name = name,
-            Deadline = deadline,
-            Goal = goal
+            Deadline = deadline
         };
-        subGoal.Validate(userId);
-        subGoal.AddDomainEvent(new SubGoalCreatedEvent(subGoal.Id));
+        subGoal.Validate();
 
         return subGoal;
     }
 
-    public void Delete(Guid userId)
+    internal void Update(string name, DateOnly deadline)
     {
-        ValidateOwner(userId);
+        Name = name;
+        Deadline = deadline;
 
-        foreach (var task in Tasks)
-        {
-            task.Delete(userId);
-        }
-
-        Delete();
+        Validate();
     }
 
-    private void Validate(Guid userId)
+    private void Validate()
     {
         if (string.IsNullOrEmpty(Name))
         {
             throw new EntityValidationFailedException("Sub-goal name must not be empty");
-        }
-
-        ValidateOwner(userId);
-    }
-
-    public void ValidateOwner(Guid userId)
-    {
-        if (Goal.UserId != userId)
-        {
-            throw new ForbiddenForUserException("This sub-goal does not belong to current user");
         }
     }
 }
