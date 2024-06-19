@@ -9,5 +9,7 @@ public sealed class TaskMappingProfile : Profile
     {
         CreateMap<Task, TaskShortInfoDto>();
         CreateMap<Task, TaskDetailsDto>();
+
+        CreateMap<SubTaskDto, SubTaskDto>();
     }
 }

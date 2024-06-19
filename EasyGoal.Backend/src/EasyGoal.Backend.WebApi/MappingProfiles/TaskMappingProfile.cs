@@ -23,5 +23,8 @@ public sealed class TaskMappingProfile : Profile
         CreateMap<TaskShortInfoDto, TaskShortInfoResponse>();
         CreateMap<TasksResponse, TasksDto>();
         CreateMap<TaskDetailsDto, TaskDetailsResponse>();
+
+        CreateMap<SubTaskDto, SubTaskResponse>();
+        CreateMap<SubTasksDto, SubTasksResponse>();
     }
 }

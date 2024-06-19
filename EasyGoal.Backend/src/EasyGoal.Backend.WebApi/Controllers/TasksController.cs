@@ -125,6 +125,40 @@ public sealed class TasksController : BaseController
         return NoContent();
     }
 
+    [HttpGet("{taskId}/sub-tasks")]
+    [ProducesResponseType(typeof(ApiResponse<SubTasksResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GetSubTasks([FromRoute] Guid taskId)
+    {
+        var query = new GetSubTasksByTaskIdQuery(taskId);
+
+        var result = await _mediator.Send(query);
+
+        var response = _mapper.Map<SubTasksResponse>(result);
+
+        return OkResponse(response);
+    }
+
+    [HttpGet("{taskId}/sub-tasks/{subTaskId}")]
+    [ProducesResponseType(typeof(ApiResponse<SubTaskResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GetSubTaskById([FromRoute] Guid taskId, [FromRoute] Guid subTaskid)
+    {
+        var query = new GetSubTaskByIdQuery(taskId, subTaskid);
+
+        var result = await _mediator.Send(query);
+
+        var response = _mapper.Map<SubTaskResponse>(result);
+
+        return OkResponse(response);
+    }
+
     [HttpPost("{taskId}/sub-tasks")]
     [ProducesResponseType(typeof(ApiResponse<SubTaskCreatedResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status400BadRequest)]
