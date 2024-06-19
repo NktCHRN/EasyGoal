@@ -9,5 +9,8 @@ public sealed class HistoricalRecordConfiguration : IEntityTypeConfiguration<His
     {
         builder.HasIndex(h => new { h.SubGoalId, h.Date })
             .IsDescending(false, true);
+
+        builder.Property(h => h.Version)
+            .IsRowVersion();
     }
 }

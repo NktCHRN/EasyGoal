@@ -10,6 +10,7 @@ public class HistoricalRecord : BaseEntity
 
     public Guid SubGoalId { get; private set; }
     public SubGoal SubGoal { get; private set; } = null!;
+    public uint Version { get; set; }
 
     private static readonly DateOnly CurrentDate = DateOnly.FromDateTime(DateTime.UtcNow);
 
