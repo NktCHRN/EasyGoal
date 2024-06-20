@@ -1,4 +1,5 @@
 ﻿using EasyGoal.Backend.Domain.Abstractions;
+using EasyGoal.Backend.Domain.Entities.Goal;
 using EasyGoal.Backend.Domain.Entities.History;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,5 +21,17 @@ public sealed class HistoryRepository : GenericRepository<HistoricalRecord>, IHi
                 ORDER BY ""Id"" DESC
                 FOR UPDATE")
             .FirstOrDefaultAsync();
+    }
+
+    public async Task<Goal?> GetGoalWithSubGoalsStartDateEndDateAsync(Guid goalId)
+    {
+        return await ApplicationDbContext
+            .Goals
+            .AsNoTracking()
+            .Include(g => g.SubGoals)
+                .ThenInclude(s => s.HistoricalRecords.Where(
+                    h => h.DateTime == s.HistoricalRecords.Min(h => h.DateTime) 
+                    || h.DateTime == s.HistoricalRecords.Max(h => h.DateTime)))
+            .FirstOrDefaultAsync(g => g.Id == goalId);
     }
 }

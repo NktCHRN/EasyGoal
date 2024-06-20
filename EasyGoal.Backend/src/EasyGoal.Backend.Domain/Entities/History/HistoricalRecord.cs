@@ -11,6 +11,8 @@ public class HistoricalRecord : BaseEntity
     public Guid SubGoalId { get; private set; }
     public SubGoal SubGoal { get; private set; } = null!;
 
+    public bool IsDone => CurrentDoneItems == CurrentTotalItems;
+
     private HistoricalRecord() { }
 
     public static HistoricalRecord Create(DateTimeOffset dateTime, Guid subGoalId)
