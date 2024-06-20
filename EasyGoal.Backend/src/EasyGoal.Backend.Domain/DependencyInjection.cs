@@ -10,6 +10,7 @@ public static class DependencyInjection
         return services
             .AddSingleton<IMCDAMethod, VikorMCDAMethod>()
             .AddSingleton<IDecisionHelper, DecisionHelper>()
-            .AddSingleton<IGanttChartDataProvider, GanttChartDataProvider>();
+            .AddSingleton<IGanttChartDataProvider, GanttChartDataProvider>()
+            .AddSingleton<IBurnUpChartDataProvider, BurnUpChartDataProvider>();
     }
 }

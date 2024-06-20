@@ -13,5 +13,7 @@ public sealed class GoalMappingProfile : Profile
             .ForMember(d => d.StartDate, opt => opt.MapFrom(s => s.CreatedAt))
             .ForMember(d => d.DiplayFileName, opt => opt.MapFrom(s => s.PictureLocalFileName))
             .ForMember(d => d.FilesCount, opt => opt.MapFrom(s => s.FileAttachments.Count));
+
+        CreateMap<Goal, GoalTitleDto>();
     }
 }

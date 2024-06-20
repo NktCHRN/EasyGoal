@@ -91,6 +91,21 @@ public sealed class GoalsController : BaseController
         return OkResponse(response);
     }
 
+    [HttpGet("titles")]
+    [ProducesResponseType(typeof(ApiResponse<GoalsTitlesResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GetGoalsTitles()
+    {
+        var query = new GetGoalsTitlesQuery();
+
+        var result = await _mediator.Send(query);
+
+        var response = _mapper.Map<GoalsTitlesResponse>(result);
+
+        return OkResponse(response);
+    }
+
     [HttpGet("{goalId}")]
     [ProducesResponseType(typeof(ApiResponse<GoalDetailsResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status401Unauthorized)]

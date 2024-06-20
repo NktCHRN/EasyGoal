@@ -34,4 +34,15 @@ public sealed class HistoryRepository : GenericRepository<HistoricalRecord>, IHi
                     || h.DateTime == s.HistoricalRecords.Max(h => h.DateTime)))
             .FirstOrDefaultAsync(g => g.Id == goalId);
     }
+
+    public async Task<Goal?> GetGoalWithSubGoalsAndHistoricalRecordsByDatesAsync(Guid goalId, DateTimeOffset start, DateTimeOffset end)
+    {
+        throw new NotImplementedException();
+        //return await ApplicationDbContext
+        //    .Goals
+        //    .AsNoTracking()
+        //    .Include(g => g.SubGoals)
+        //        .ThenInclude()
+        //    .FirstOrDefaultAsync(g => g.Id == goalId);
+    }
 }
