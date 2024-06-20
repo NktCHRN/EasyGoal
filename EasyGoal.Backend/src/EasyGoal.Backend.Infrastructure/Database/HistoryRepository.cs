@@ -37,12 +37,15 @@ public sealed class HistoryRepository : GenericRepository<HistoricalRecord>, IHi
 
     public async Task<Goal?> GetGoalWithSubGoalsAndHistoricalRecordsByDatesAsync(Guid goalId, DateTimeOffset start, DateTimeOffset end)
     {
-        throw new NotImplementedException();
-        //return await ApplicationDbContext
-        //    .Goals
-        //    .AsNoTracking()
-        //    .Include(g => g.SubGoals)
-        //        .ThenInclude()
-        //    .FirstOrDefaultAsync(g => g.Id == goalId);
+        return await ApplicationDbContext
+            .Goals
+            .AsNoTracking()
+            .Include(g => g.SubGoals)
+                .ThenInclude(s => s.HistoricalRecords.Where(
+                    h => (h.DateTime >= start && h.DateTime <= end) 
+                        || (h.DateTime == s.HistoricalRecords.Where(sh => sh.DateTime < start).Max(hs => hs.DateTime))
+                        || (h.DateTime == s.HistoricalRecords.Where(sh => sh.DateTime > end).Min(hs => hs.DateTime)))
+                .OrderBy(h => h.DateTime))
+            .FirstOrDefaultAsync(g => g.Id == goalId);
     }
 }

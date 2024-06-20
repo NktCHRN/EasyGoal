@@ -43,4 +43,27 @@ public sealed class ChartsController : BaseController
 
         return OkResponse(response);
     }
+
+    [HttpGet("burn-up/goals/{goalId}")]
+    [ProducesResponseType(typeof(ApiResponse<BurnUpChartDataResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GetBurnUpChartForGoal(
+        [FromRoute] Guid goalId,
+        [FromQuery] DateTimeOffset start,
+        [FromQuery] DateTimeOffset end,
+        [FromQuery] string ianaTimeZone,
+        [FromQuery] int pointsCount = 10)
+    {
+        var query = new GetGoalBurnUpChartDataQuery(goalId, start, end, ianaTimeZone, pointsCount);
+
+        var result = await _mediator.Send(query);
+
+        var response = _mapper.Map<BurnUpChartDataResponse>(result);
+
+        return OkResponse(response);
+    }
 }

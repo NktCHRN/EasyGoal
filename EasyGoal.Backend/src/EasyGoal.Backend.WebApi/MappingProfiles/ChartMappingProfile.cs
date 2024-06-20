@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EasyGoal.Backend.Application.Features.Charts.Dto;
 using EasyGoal.Backend.Domain.Utilities;
 using EasyGoal.Backend.WebApi.Contracts.Responses.Charts;
 
@@ -10,5 +11,8 @@ public sealed class ChartMappingProfile : Profile
     {
         CreateMap<GanttChartData, GanttChartDataResponse>();
         CreateMap<GanttChartLine, GanttChartLineResponse>();
+
+        CreateMap<BurnUpChartDataDto, BurnUpChartDataResponse>();
+        CreateMap<BurnUpChartItemDto, BurnUpChartItemResponse>();
     }
 }
