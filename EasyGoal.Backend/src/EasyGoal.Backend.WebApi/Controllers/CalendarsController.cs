@@ -23,7 +23,7 @@ public sealed class CalendarsController : BaseController
     }
 
     [HttpGet("weekly")]
-    [ProducesResponseType(typeof(ApiResponse<CalendarEventsResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<WeeklyCalendarEventsResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status500InternalServerError)]
@@ -35,7 +35,24 @@ public sealed class CalendarsController : BaseController
 
         var result = await _mediator.Send(query);
 
-        var response = _mapper.Map<CalendarEventsResponse>(result);
+        var response = _mapper.Map<WeeklyCalendarEventsResponse>(result);
+
+        return OkResponse(response);
+    }
+
+    [HttpGet("daily")]
+    [ProducesResponseType(typeof(ApiResponse<WeeklyCalendarEventsResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GetWeeklyCalendar(
+    [FromQuery] DateTimeOffset current)
+    {
+        var query = new GetDailyCalendarQuery(current);
+
+        var result = await _mediator.Send(query);
+
+        var response = _mapper.Map<DailyCalendarEventsResponse>(result);
 
         return OkResponse(response);
     }

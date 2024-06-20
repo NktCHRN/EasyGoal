@@ -7,7 +7,7 @@ using MediatR;
 using Task = EasyGoal.Backend.Domain.Entities.Task.Task;
 
 namespace EasyGoal.Backend.Application.Features.Calendars.Queries;
-public sealed class GetWeeklyCalendarQueryHandler : IRequestHandler<GetWeeklyCalendarQuery, CalendarEventsDto>
+public sealed class GetWeeklyCalendarQueryHandler : IRequestHandler<GetWeeklyCalendarQuery, WeeklyCalendarEventsDto>
 {
     private readonly IRepository<Task> _taskRepository;
     private readonly IMapper _mapper;
@@ -20,11 +20,11 @@ public sealed class GetWeeklyCalendarQueryHandler : IRequestHandler<GetWeeklyCal
         _currentApplicationUser = currentApplicationUser;
     }
 
-    public async Task<CalendarEventsDto> Handle(GetWeeklyCalendarQuery request, CancellationToken cancellationToken)
+    public async Task<WeeklyCalendarEventsDto> Handle(GetWeeklyCalendarQuery request, CancellationToken cancellationToken)
     {
         var userId = _currentApplicationUser.GetValidatedId();
         var tasks = await _taskRepository.ListAsync(new TasksByDatesAsNoTrackingSpec(request.Start, request.End, userId), cancellationToken);
 
-        return new CalendarEventsDto(_mapper.Map<IReadOnlyList<CalendarTaskDto>>(tasks));
+        return new WeeklyCalendarEventsDto(_mapper.Map<IReadOnlyList<WeeklyCalendarTaskDto>>(tasks));
     }
 }

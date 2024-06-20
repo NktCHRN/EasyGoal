@@ -1,5 +1,5 @@
 ﻿namespace EasyGoal.Backend.Application.Features.Calendars.Dto;
-public sealed record CalendarTaskDto
+public sealed record WeeklyCalendarTaskDto
 {
     public DateTimeOffset Start {  get; set; }
     public DateTimeOffset End { get; set; }

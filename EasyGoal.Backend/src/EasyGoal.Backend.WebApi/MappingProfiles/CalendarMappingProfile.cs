@@ -8,7 +8,9 @@ public sealed class CalendarMappingProfile : Profile
 {
     public CalendarMappingProfile() 
     {
-        CreateMap<CalendarTaskDto, CalendarTaskResponse>();
-        CreateMap<CalendarEventsDto, CalendarEventsResponse>();
+        CreateMap<WeeklyCalendarTaskDto, WeeklyCalendarTaskResponse>();
+        CreateMap<WeeklyCalendarEventsDto, WeeklyCalendarEventsResponse>();
+
+        CreateMap<DailyCalendarEventsDto, DailyCalendarEventsResponse>();
     }
 }
