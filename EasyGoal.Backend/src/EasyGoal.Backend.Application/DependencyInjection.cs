@@ -17,7 +17,6 @@ public static class DependencyInjection
                 cfg
                 .RegisterServicesFromAssembly(typeof(IApplicationAssemblyMarker).Assembly)
                 .AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-                cfg.Lifetime = ServiceLifetime.Transient;
             })
             .AddAutoMapper(typeof(IApplicationAssemblyMarker).Assembly);
     }
