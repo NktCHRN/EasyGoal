@@ -21,7 +21,7 @@ public sealed class TaskMappingProfile : Profile
         CreateMap<UpdateSubTaskRequest, UpdateSubTaskCommand>();
 
         CreateMap<TaskShortInfoDto, TaskShortInfoResponse>();
-        CreateMap<TasksResponse, TasksDto>();
+        CreateMap<TasksDto, TasksResponse>();
         CreateMap<TaskDetailsDto, TaskDetailsResponse>();
 
         CreateMap<SubTaskDto, SubTaskResponse>();

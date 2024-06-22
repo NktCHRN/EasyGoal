@@ -148,9 +148,9 @@ public sealed class TasksController : BaseController
     [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status403Forbidden)]
     [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> GetSubTaskById([FromRoute] Guid taskId, [FromRoute] Guid subTaskid)
+    public async Task<IActionResult> GetSubTaskById([FromRoute] Guid taskId, [FromRoute] Guid subTaskId)
     {
-        var query = new GetSubTaskByIdQuery(taskId, subTaskid);
+        var query = new GetSubTaskByIdQuery(taskId, subTaskId);
 
         var result = await _mediator.Send(query);
 
