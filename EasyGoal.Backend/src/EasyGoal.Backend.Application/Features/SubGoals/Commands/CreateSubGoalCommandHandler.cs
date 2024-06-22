@@ -11,11 +11,13 @@ public sealed class CreateSubGoalCommandHandler : IRequestHandler<CreateSubGoalC
 {
     private readonly ICurrentApplicationUser _currentApplicationUser;
     private readonly IRepository<Goal> _goalRepository;
+    private readonly IRepository<SubGoal> _subGoalRepository;
 
-    public CreateSubGoalCommandHandler(ICurrentApplicationUser currentApplicationUser, IRepository<Goal> goalRepository)
+    public CreateSubGoalCommandHandler(ICurrentApplicationUser currentApplicationUser, IRepository<Goal> goalRepository, IRepository<SubGoal> subGoalRepository)
     {
         _currentApplicationUser = currentApplicationUser;
         _goalRepository = goalRepository;
+        _subGoalRepository = subGoalRepository;
     }
 
     public async Task<SubGoalCreatedDto> Handle(CreateSubGoalCommand request, CancellationToken cancellationToken)
@@ -26,7 +28,7 @@ public sealed class CreateSubGoalCommandHandler : IRequestHandler<CreateSubGoalC
 
         var subGoal = goal.AddSubGoal(request.Name, request.Deadline, userId);
 
-        await _goalRepository.SaveChangesAsync(cancellationToken);
+        await _subGoalRepository.AddAsync(subGoal, cancellationToken);
 
         return new SubGoalCreatedDto(subGoal.Id);
     }

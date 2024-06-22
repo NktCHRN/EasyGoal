@@ -2,6 +2,7 @@
 using EasyGoal.Backend.Application.Features.Tasks.Dto;
 using EasyGoal.Backend.Domain.Abstractions;
 using EasyGoal.Backend.Domain.Entities.Goal;
+using EasyGoal.Backend.Domain.Entities.Task;
 using EasyGoal.Backend.Domain.Exceptions;
 using EasyGoal.Backend.Domain.Specifications.Goals;
 using EasyGoal.Backend.Domain.Specifications.Tasks;
@@ -14,12 +15,14 @@ public sealed class CreateSubTaskCommandHandler : IRequestHandler<CreateSubTaskC
     private readonly IRepository<Task> _taskRepository;
     private readonly IRepository<Goal> _goalRepository;
     private readonly ICurrentApplicationUser _currentApplicationUser;
+    private readonly IRepository<SubTask> _subTaskRepository;
 
-    public CreateSubTaskCommandHandler(IRepository<Task> taskRepository, IRepository<Goal> goalRepository, ICurrentApplicationUser currentApplicationUser)
+    public CreateSubTaskCommandHandler(IRepository<Task> taskRepository, IRepository<Goal> goalRepository, ICurrentApplicationUser currentApplicationUser, IRepository<SubTask> subTaskRepository)
     {
         _taskRepository = taskRepository;
         _goalRepository = goalRepository;
         _currentApplicationUser = currentApplicationUser;
+        _subTaskRepository = subTaskRepository;
     }
 
     public async Task<SubTaskCreatedDto> Handle(CreateSubTaskCommand request, CancellationToken cancellationToken)
@@ -34,7 +37,7 @@ public sealed class CreateSubTaskCommandHandler : IRequestHandler<CreateSubTaskC
 
         var subTask = task.AddSubTask(request.Name);
 
-        await _taskRepository.SaveChangesAsync(cancellationToken);
+        await _subTaskRepository.AddAsync(subTask, cancellationToken);
 
         return new SubTaskCreatedDto(subTask.Id);
     }

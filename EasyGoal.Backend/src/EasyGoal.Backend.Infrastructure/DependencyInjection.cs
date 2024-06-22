@@ -49,9 +49,9 @@ public static class DependencyInjection
     private static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
     {
         return services
-                    .AddSingleton<SoftDeleteInterceptor>()
-                    .AddSingleton<AuditableInterceptor>()
-                    .AddSingleton<DispatchDomainEventsInterceptor>()
+                    .AddScoped<SoftDeleteInterceptor>()
+                    .AddScoped<AuditableInterceptor>()
+                    .AddScoped<DispatchDomainEventsInterceptor>()
                     .AddDbContext<ApplicationDbContext>((sp, options)
                         => options
                             .UseNpgsql(configuration.GetConnectionString("ApplicationDbConnection"))
