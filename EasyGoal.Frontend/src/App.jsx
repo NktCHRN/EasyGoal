@@ -1,5 +1,5 @@
 import { RouterProvider } from 'react-router-dom';
-import { SnackbarProvider } from 'notistack';
+import { AuthProvider} from 'services/auth/AuthProvider';
 
 // project import
 import router from 'routes';
@@ -13,7 +13,9 @@ export default function App() {
   return (
     <ThemeCustomization>
       <ScrollTop>
-        <RouterProvider router={router} />
+        <AuthProvider>
+          <RouterProvider router={router} />
+        </AuthProvider>
       </ScrollTop>
     </ThemeCustomization>
   );
