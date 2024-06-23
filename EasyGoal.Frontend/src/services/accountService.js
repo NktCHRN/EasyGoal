@@ -9,3 +9,14 @@ export const register = (user) =>
         throw e;
     })
 };
+
+export const login = (user) =>
+    {
+        return axiosConfig.post('account/login', user)
+        .then(r => r.data)
+        .catch(e => {
+            console.error('Login request failed', error);
+            throw e;
+        })
+    };
+    

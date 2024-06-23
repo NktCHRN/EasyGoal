@@ -1,5 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import * as React from 'react';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 // material-ui
 import Button from '@mui/material/Button';
@@ -48,6 +54,16 @@ export default function AuthRegister() {
     setLevel(strengthColor(temp));
   };
 
+  const [dialogState, setDialogOpen] = React.useState({openDialog: false, email: ''});
+
+  const handleDialogOpen = (email) => {
+    setDialogOpen({openDialog: true, email: email});
+  };
+
+  const handleDialogClose = () => {
+    setDialogOpen({openDialog: false, email: ''});
+  };
+
   useEffect(() => {
     changePassword('');
   }, []);
@@ -65,10 +81,10 @@ export default function AuthRegister() {
           register(values)
           .then(v => 
             {
-
+                handleDialogOpen(v.data.email)
             }
           )
-          .error()
+          .catch(() => {})
           .finally(() => actions.setSubmitting(false))
         }}
         validationSchema={Yup.object().shape({
@@ -200,6 +216,26 @@ export default function AuthRegister() {
           </form>
         )}
       </Formik>
+      <Dialog
+        open={dialogState.openDialog}
+        onClose={handleDialogClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"You have successfully registered"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Please review your messages and confirm your email address {dialogState.email}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDialogClose} autoFocus>
+            Ok
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }
