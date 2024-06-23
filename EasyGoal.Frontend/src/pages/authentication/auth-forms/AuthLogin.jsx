@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 // material-ui
 import Button from '@mui/material/Button';
@@ -20,9 +21,12 @@ import Typography from '@mui/material/Typography';
 // third party
 import * as Yup from 'yup';
 import { Formik } from 'formik';
+import {enqueueSnackbar} from 'notistack'
 
 // project import
 import AnimateButton from 'components/@extended/AnimateButton';
+import {useAuth} from 'services/auth/AuthProvider'
+import {login as loginRequest} from 'services/accountService'
 
 // assets
 import EyeOutlined from '@ant-design/icons/EyeOutlined';
@@ -33,6 +37,9 @@ import FirebaseSocial from './FirebaseSocial';
 
 export default function AuthLogin({ isDemo = false }) {
   const [checked, setChecked] = React.useState(false);
+
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = React.useState(false);
   const handleClickShowPassword = () => {
@@ -50,6 +57,17 @@ export default function AuthLogin({ isDemo = false }) {
           email: '',
           password: '',
           submit: null
+        }}
+        onSubmit={(values, actions) => {
+          loginRequest(values)
+          .then(v => 
+            {
+                login(v.accessToken, v.refreshToken)
+                navigate('../app/goals')
+            }
+          )
+          .catch(e => enqueueSnackbar(e.message))
+          .finally(() => actions.setSubmitting(false))
         }}
         validationSchema={Yup.object().shape({
           email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),

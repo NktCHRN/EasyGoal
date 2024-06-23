@@ -10,6 +10,7 @@ export const register = (user) =>
 export const login = (user) =>
     {
         return axiosConfig.post('account/login', user)
-        .then(r => r.data)
+        .then(r => r.data.data)
+        .catch(e => {throw e.response.data.error})
     };
     
