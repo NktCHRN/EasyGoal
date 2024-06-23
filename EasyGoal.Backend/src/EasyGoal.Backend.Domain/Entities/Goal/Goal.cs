@@ -23,7 +23,7 @@ public class Goal : BaseAuditableEntity
             return days != 0 ? TotalTasks / (decimal)days : 0;
         }
     }
-    public DateTimeOffset? EndDate => DoneTasks != TotalTasks 
+    public DateTimeOffset? EndDate => DoneTasks != TotalTasks || DoneTasks == 0 
         ? null 
         : SubGoals.SelectMany(s => s.HistoricalRecords).MaxBy(h => h.DateTime)?.DateTime;
 
