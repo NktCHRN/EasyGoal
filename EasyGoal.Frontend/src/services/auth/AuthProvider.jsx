@@ -35,12 +35,12 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem('refreshToken', refreshToken);
   };
 
-  const logout = () => {
+  const logout = useCallback(() => {
     setIsAuthenticated(false);
     setUser(null);
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
-  };
+  }, []);
 
   const updateToken = useCallback((token, refreshToken) => {
     const decodedToken = jwtDecode(token);
