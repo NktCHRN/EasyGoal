@@ -30,8 +30,7 @@ public sealed class GetSubTaskByIdQueryHandler : IRequestHandler<GetSubTaskByIdQ
         var userId = _currentApplicationUser.GetValidatedId();
         var task = await _taskRepository.FirstOrDefaultAsync(new TaskByIdWithSubTaskByIdAsNoTrackingSpec(request.TaskId, request.Id), cancellationToken)
             ?? throw new EntityNotFoundException($"Task with id {request.TaskId} was not found");
-        var subTask = task.SubTasks.SingleOrDefault() 
-            ?? throw new EntityNotFoundException($"Sub-task with id {request.Id} was not found");
+        var subTask = task.FindSubTask(request.Id);
         var goal = await _goalRepository.FirstOrDefaultAsync(new GoalBySubGoalIdForOwnerValidationSpec(task.SubGoalId), cancellationToken)
             ?? throw new EntityNotFoundException($"Sub-goal with id {task.SubGoalId} was not found");
 

@@ -29,9 +29,7 @@ public sealed class HistoryRepository : GenericRepository<HistoricalRecord>, IHi
             .Goals
             .AsNoTracking()
             .Include(g => g.SubGoals)
-                .ThenInclude(s => s.HistoricalRecords.Where(
-                    h => h.DateTime == s.HistoricalRecords.Min(h => h.DateTime) 
-                    || h.DateTime == s.HistoricalRecords.Max(h => h.DateTime)))
+                .ThenInclude(s => s.HistoricalRecords.OrderByDescending(h => h.DateTime).Take(1))
             .FirstOrDefaultAsync(g => g.Id == goalId);
     }
 
@@ -41,11 +39,7 @@ public sealed class HistoryRepository : GenericRepository<HistoricalRecord>, IHi
             .Goals
             .AsNoTracking()
             .Include(g => g.SubGoals)
-                .ThenInclude(s => s.HistoricalRecords.Where(
-                    h => (h.DateTime >= start && h.DateTime <= end) 
-                        || (h.DateTime == s.HistoricalRecords.Where(sh => sh.DateTime < start).Max(hs => hs.DateTime))
-                        || (h.DateTime == s.HistoricalRecords.Where(sh => sh.DateTime > end).Min(hs => hs.DateTime)))
-                .OrderBy(h => h.DateTime))
+                .ThenInclude(s => s.HistoricalRecords)
             .FirstOrDefaultAsync(g => g.Id == goalId);
     }
 }

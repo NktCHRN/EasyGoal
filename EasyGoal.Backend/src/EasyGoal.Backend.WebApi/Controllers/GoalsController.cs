@@ -79,8 +79,8 @@ public sealed class GoalsController : BaseController
     [ProducesResponseType(typeof(ApiResponse<object?>), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetUserGoals(
         [FromQuery] string? searchText,
-        [FromQuery] int perPage,
-        [FromQuery] int page)
+        [FromQuery] int perPage = 20,
+        [FromQuery] int page = 1)
     {
         var query = new GetUserGoalsQuery(searchText, new (perPage, page));
 

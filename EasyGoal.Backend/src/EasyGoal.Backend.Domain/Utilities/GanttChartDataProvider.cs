@@ -14,7 +14,7 @@ public sealed class GanttChartDataProvider : IGanttChartDataProvider
         var lines = new List<GanttChartLine>();
         foreach (var subGoal in goal.SubGoals)
         {
-            var subGoalStart = subGoal.HistoricalRecords.Min(h => h.DateTime);
+            var subGoalStart = subGoal.CreatedAt;
             var latestRecord = subGoal.HistoricalRecords.MaxBy(h => h.DateTime)!;
             var subGoalEnd = latestRecord.IsDone ? latestRecord.DateTime : end;
 

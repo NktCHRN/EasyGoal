@@ -91,7 +91,7 @@ public class Task : BaseAuditableEntity
         subTask.Delete();
     }
 
-    private SubTask FindSubTask(Guid id)
+    public SubTask FindSubTask(Guid id)
     {
         return SubTasks.FirstOrDefault(x => x.Id == id) ?? throw new EntityNotFoundException($"Sub-task with id {id} was not found");
     }

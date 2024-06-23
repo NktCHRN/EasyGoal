@@ -1,5 +1,6 @@
 ﻿using EasyGoal.Backend.Domain.Abstractions.Utilities;
 using EasyGoal.Backend.Domain.Entities.Goal;
+using EasyGoal.Backend.Domain.Entities.History;
 using EasyGoal.Backend.Domain.Exceptions;
 using NodaTime;
 
@@ -22,11 +23,23 @@ public sealed class BurnUpChartDataProvider : IBurnUpChartDataProvider
         
         var dates = GetDates(goal, timeZone, start, end, pointsCount);
 
+        var historicalRecords = goal
+            .SubGoals
+            .Select(s => new
+            {
+                s.Id,
+                HistoricalRecords = s.HistoricalRecords
+                .Select(h => (h, Instant.FromDateTimeOffset(h.DateTime).InZone(timeZone).Date.ToDateOnly()))
+                .OrderBy(h => h.Item1.DateTime)
+                .ToList()
+            })
+            .ToDictionary(k => k.Id, v => v.HistoricalRecords);
+
         var items = new BurnUpChartItem[dates.Count];
 
         for (var i = 0; i < dates.Count; i++)
         {
-            items[i] = GetChartItemByDate(goal, timeZone, dates[i]);
+            items[i] = GetChartItemByDate(goal, historicalRecords, timeZone, dates[i]);
         }
 
         return new BurnUpChartData(items);
@@ -61,7 +74,7 @@ public sealed class BurnUpChartDataProvider : IBurnUpChartDataProvider
         return dates;
     }
 
-    private static BurnUpChartItem GetChartItemByDate(Goal goal, DateTimeZone timeZone, DateOnly date)
+    private static BurnUpChartItem GetChartItemByDate(Goal goal, IReadOnlyDictionary<Guid, List<(HistoricalRecord Record, DateOnly Date)>> historicalRecords, DateTimeZone timeZone, DateOnly date)
     {
         var item = new BurnUpChartItem
         {
@@ -70,12 +83,11 @@ public sealed class BurnUpChartDataProvider : IBurnUpChartDataProvider
 
         foreach (var subGoal in goal.SubGoals)
         {
-            var historicalRecord = subGoal.HistoricalRecords
-                .Where(h => Instant.FromDateTimeOffset(h.DateTime).InZone(timeZone).Date.ToDateOnly() <= date)
-                .MaxBy(h => h.DateTime);
+            var historicalRecord = historicalRecords[subGoal.Id]
+                .LastOrDefault(h => h.Date <= date);
 
-            item.DoneItems += historicalRecord?.CurrentDoneItems ?? 0;
-            item.TotalItems += historicalRecord?.CurrentTotalItems ?? 0;
+            item.DoneItems += historicalRecord.Record?.CurrentDoneItems ?? 0;
+            item.TotalItems += historicalRecord.Record?.CurrentTotalItems ?? 0;
         }
 
         return item;

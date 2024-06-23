@@ -26,7 +26,7 @@ public sealed class GetGoalDetailsQueryHandler : IRequestHandler<GetGoalDetailsQ
         var userId = _currentApplicationUser.GetValidatedId();
 
         var goal = await _goalRepository.FirstOrDefaultAsync(
-            new GoalByIdAsNoTrackingSpec(userId),
+            new GoalByIdAsNoTrackingSpec(request.Id),
             cancellationToken)
             ?? throw new EntityNotFoundException($"Goal with id {request.Id} was not found");
         goal.ValidateOwner(userId);
