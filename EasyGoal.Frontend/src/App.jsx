@@ -1,4 +1,5 @@
 import { RouterProvider } from 'react-router-dom';
+import { SnackbarProvider } from 'notistack';
 
 // project import
 import router from 'routes';

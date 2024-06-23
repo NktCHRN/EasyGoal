@@ -25,6 +25,7 @@ import Divider from '@mui/material/Divider';
 // third party
 import * as Yup from 'yup';
 import { Formik } from 'formik';
+import {enqueueSnackbar} from 'notistack'
 
 // project import
 import AnimateButton from 'components/@extended/AnimateButton';
@@ -81,10 +82,10 @@ export default function AuthRegister() {
           register(values)
           .then(v => 
             {
-                handleDialogOpen(v.data.email)
+                handleDialogOpen(v.email)
             }
           )
-          .catch(() => {})
+          .catch(e => enqueueSnackbar(e.message))
           .finally(() => actions.setSubmitting(false))
         }}
         validationSchema={Yup.object().shape({
