@@ -34,19 +34,12 @@ public static class DependencyInjection
 
         services.AddSwagger();
 
+        services.AddCors(opt => opt.AddPolicy("DEV_CORS", p => p
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader()));
+
         return services;
-        //.AddOptions(configuration)
-        //.AddDatabase(configuration)
-        //.AddBlobStorage(configuration)
-        //.AddRepositories()
-        //.AddMappers()
-        //.AddValidators()
-        //.AddServices()
-        //.AddSeeders()
-        //.AddAuth(configuration)
-        //.AddApiControllers()
-        //.AddEndpointsApiExplorer()
-        //.AddSwagger();
     }
 
     private static IServiceCollection AddAuth(this IServiceCollection services, IConfiguration configuration)

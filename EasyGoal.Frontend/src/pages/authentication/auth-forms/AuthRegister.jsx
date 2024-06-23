@@ -24,6 +24,7 @@ import { Formik } from 'formik';
 import AnimateButton from 'components/@extended/AnimateButton';
 import { strengthColor, strengthIndicator, hasMixed, hasNumber } from 'utils/password-strength';
 import FirebaseSocial from './FirebaseSocial';
+import { register } from 'services/accountService';
 
 // assets
 import EyeOutlined from '@ant-design/icons/EyeOutlined';
@@ -57,9 +58,18 @@ export default function AuthRegister() {
         initialValues={{
           name: '',
           email: '',
-          company: '',
           password: '',
           submit: null
+        }}
+        onSubmit={(values, actions) => {
+          register(values)
+          .then(v => 
+            {
+
+            }
+          )
+          .error()
+          .finally(() => actions.setSubmitting(false))
         }}
         validationSchema={Yup.object().shape({
           name: Yup.string().max(255).required('Name is required'),
