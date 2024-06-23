@@ -23,7 +23,7 @@ const Goals = {
       id: 'goals',
       title: 'Goals',
       type: 'item',
-      url: '/dashboard/default',
+      url: '/app/goals',
       icon: icons.TrophyOutlined,
       breadcrumbs: false
     },
@@ -31,7 +31,7 @@ const Goals = {
       id: 'decision-helper',
       title: 'Decision helper',
       type: 'item',
-      url: '/decision-helper',
+      url: '/app/decision-helper',
       icon: icons.ProjectOutlined,
       breadcrumbs: false
     }

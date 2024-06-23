@@ -15,36 +15,46 @@ const SamplePage = Loadable(lazy(() => import('pages/extra-pages/sample-page')))
 // ==============================|| MAIN ROUTING ||============================== //
 
 const MainRoutes = {
-  path: '/',
+  path: 'app',
   element: <Dashboard />,
   children: [
     {
-      path: '/',
+      path: '',
       element: <DashboardDefault />
     },
     {
-      path: 'color',
-      element: <Color />
+      path: 'goals',
+      element: <DashboardDefault />
     },
     {
-      path: 'dashboard',
+      path: 'goals',
       children: [
         {
-          path: 'default',
+          path: ':goalId',
           element: <DashboardDefault />
         }
       ]
     },
     {
-      path: 'sample-page',
+      path: 'today',
+      element: <Color />,
+      children: [
+        {
+          path: ':date',
+          element: <Color />,
+        }
+      ]
+    },
+    {
+      path: 'calendar',
       element: <SamplePage />
     },
     {
-      path: 'shadow',
+      path: 'decision-helper',
       element: <Shadow />
     },
     {
-      path: 'typography',
+      path: 'charts',
       element: <Typography />
     }
   ]

@@ -2,7 +2,7 @@ import useSWR, { mutate } from 'swr';
 import { useMemo } from 'react';
 
 const initialState = {
-  openedItem: 'dashboard',
+  openedItem: 'goals',
   openedComponent: 'buttons',
   openedHorizontalItem: null,
   isDashboardDrawerOpened: false,
@@ -12,14 +12,14 @@ const initialState = {
 export const endpoints = {
   key: 'api/menu',
   master: 'master',
-  dashboard: '/dashboard' // server URL
+  dashboard: '/goals' // server URL
 };
 
 export function useGetMenuMaster() {
   const { data, isLoading } = useSWR(endpoints.key + endpoints.master, () => initialState, {
     revalidateIfStale: false,
     revalidateOnFocus: false,
-    revalidateOnReconnect: false
+    revalidateOnReconnect: false,
   });
 
   const memoizedValue = useMemo(
@@ -29,7 +29,7 @@ export function useGetMenuMaster() {
     }),
     [data, isLoading]
   );
-
+  console.log(memoizedValue);
   return memoizedValue;
 }
 

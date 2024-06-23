@@ -14,7 +14,7 @@ const Analysis = {
       id: 'charts',
       title: 'Charts',
       type: 'item',
-      url: '/charts',
+      url: '/app/charts',
       icon: icons.LineChartOutlined,
       breadcrumbs: false
     }

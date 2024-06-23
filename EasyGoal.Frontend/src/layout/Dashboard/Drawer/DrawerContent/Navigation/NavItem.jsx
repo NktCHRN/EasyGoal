@@ -20,6 +20,7 @@ export default function NavItem({ item, level }) {
   const { menuMaster } = useGetMenuMaster();
   const drawerOpen = menuMaster.isDashboardDrawerOpened;
   const openItem = menuMaster.openedItem;
+  console.log(openItem)
 
   let itemTarget = '_self';
   if (item.target) {
@@ -38,7 +39,7 @@ export default function NavItem({ item, level }) {
 
   // active menu item on page load
   useEffect(() => {
-    if (pathname === item.url) handlerActiveItem(item.id);
+    if (!!matchPath({ path: item.url, end: false }, pathname)) handlerActiveItem(item.id);
     // eslint-disable-next-line
   }, [pathname]);
 

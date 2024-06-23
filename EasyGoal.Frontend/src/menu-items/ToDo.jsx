@@ -17,7 +17,7 @@ const ToDo = {
       id: 'today',
       title: 'Today',
       type: 'item',
-      url: '/today',
+      url: '/app/today',
       icon: icons.CheckCircleOutlined,
       breadcrumbs: false
     },
@@ -25,7 +25,7 @@ const ToDo = {
       id: 'calendar',
       title: 'Calendar',
       type: 'item',
-      url: '/calendar',
+      url: '/app/calendar',
       icon: icons.CalendarOutlined,
       breadcrumbs: false
     }
