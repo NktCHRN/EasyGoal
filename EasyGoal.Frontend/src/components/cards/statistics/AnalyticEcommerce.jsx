@@ -37,14 +37,22 @@ export default function AnalyticEcommerce({ name, description, doneTasks, totalT
   return (
     <MainCard contentSX={{ p: 2.25 }}>
       <Stack spacing={0.5}>
-        <Typography variant="h6" color="text.secondary">
+        <Tooltip title={name} arrow>
+        <Typography variant="h6" color="text.secondary" sx={{
+        display: '-webkit-box',
+        overflow: 'hidden',
+        textOverflow: "ellipsis",
+        WebkitBoxOrient: 'vertical',
+        WebkitLineClamp: 1,
+    }}>
           {name}
         </Typography>
+        </Tooltip>
         <Grid container alignItems="center" justifyContent="space-between">
             <Grid item>
               <Stack spacing={0.5}>
               <Typography variant="h4" color="inherit">
-              {doneTasks} / {totalTasks} <Typography display="inline" color="text.secondary" variant="h6">({doneTasksPercentage}%)</Typography>
+              {doneTasks} / {totalTasks} <Typography display="inline" color="text.secondary" variant="h6">({doneTasksPercentage.toFixed(2)}%)</Typography>
             </Typography>
               <Chip
                 variant="combined"
@@ -57,7 +65,7 @@ export default function AnalyticEcommerce({ name, description, doneTasks, totalT
             </Grid>
             <Grid item>
             <Tooltip title={`${doneTasksPercentage}%`} arrow>
-            <CircularProgress variant="determinate" value={25} />
+            <CircularProgress variant="determinate" value={doneTasksPercentage} />
             </Tooltip>
             <Box width="75px"></Box>
             </Grid>
