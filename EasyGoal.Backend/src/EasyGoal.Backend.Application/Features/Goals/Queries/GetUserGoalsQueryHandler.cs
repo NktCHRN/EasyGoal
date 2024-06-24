@@ -26,9 +26,10 @@ public sealed class GetUserGoalsQueryHandler : IRequestHandler<GetUserGoalsQuery
         var goals = await _goalRepository.ListAsync(
             new GoalsByUserIdPagedAsNoTrackingSpec(userId, request.SearchText, request.PaginationParameters.PerPage, request.PaginationParameters.Page), 
             cancellationToken);
+        var goalsCount = await _goalRepository.CountAsync(new GoalsByUserIdSpec(userId), cancellationToken);
 
         var goalsDtos = _mapper.Map<IReadOnlyCollection<GoalShortInfoDto>>(goals);
 
-        return new UserGoalsDto(goalsDtos);
+        return new UserGoalsDto(goalsDtos, goalsCount);
     }
 }

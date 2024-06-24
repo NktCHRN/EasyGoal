@@ -7,7 +7,7 @@ import Dashboard from 'layout/Dashboard';
 const Color = Loadable(lazy(() => import('pages/component-overview/color')));
 const Typography = Loadable(lazy(() => import('pages/component-overview/typography')));
 const Shadow = Loadable(lazy(() => import('pages/component-overview/shadows')));
-const DashboardDefault = Loadable(lazy(() => import('pages/dashboard/index')));
+const Goals = Loadable(lazy(() => import('pages/goals/index')));
 
 // render - sample page
 const SamplePage = Loadable(lazy(() => import('pages/extra-pages/sample-page')));
@@ -20,18 +20,18 @@ const MainRoutes = {
   children: [
     {
       path: '',
-      element: <DashboardDefault />
+      element: <Goals />
     },
     {
       path: 'goals',
-      element: <DashboardDefault />
+      element: <Goals />
     },
     {
       path: 'goals',
       children: [
         {
           path: ':goalId',
-          element: <DashboardDefault />
+          element: <Goals />
         }
       ]
     },

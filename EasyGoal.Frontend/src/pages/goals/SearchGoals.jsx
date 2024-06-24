@@ -11,13 +11,13 @@ import SearchOutlined from '@ant-design/icons/SearchOutlined';
 
 export default function Search() {
   return (
-    <Box sx={{ width: '100%', ml: { xs: 0, md: 1 } }}>
-      <FormControl sx={{ width: { xs: '100%', md: 224 } }}>
+    <Box sx={{ width: '100%' }}>
+      <FormControl sx={{ width: { xs: '100%' } }}>
         <OutlinedInput
           size="small"
           id="header-search"
           startAdornment={
-            <InputAdornment position="start" sx={{ mr: -0.5 }}>
+            <InputAdornment position="start">
               <SearchOutlined />
             </InputAdornment>
           }
@@ -25,7 +25,7 @@ export default function Search() {
           inputProps={{
             'aria-label': 'weight'
           }}
-          placeholder="Ctrl + K"
+          placeholder="Enter the name of your goal here"
         />
       </FormControl>
     </Box>

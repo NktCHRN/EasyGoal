@@ -6,6 +6,8 @@ import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress'
+import { Tooltip } from '@mui/material';
 
 // project import
 import MainCard from 'components/MainCard';
@@ -16,40 +18,59 @@ import FallOutlined from '@ant-design/icons/FallOutlined';
 
 const iconSX = { fontSize: '0.75rem', color: 'inherit', marginLeft: 0, marginRight: 0 };
 
-export default function AnalyticEcommerce({ color = 'primary', title, count, percentage, isLoss, extra }) {
+export default function AnalyticEcommerce({ name, description, doneTasks, totalTasks, doneTasksPercentage, deadline }) {
+  const series = [0];
+  const options = {
+    chart: {
+      type: 'radialBar'
+    },
+    plotOptions: {
+      radialBar: {
+        hollow: {
+          size: '70%'
+        }
+      }
+    },
+    labels: ['Progress']
+  }
+
   return (
     <MainCard contentSX={{ p: 2.25 }}>
       <Stack spacing={0.5}>
         <Typography variant="h6" color="text.secondary">
-          {title}
+          {name}
         </Typography>
-        <Grid container alignItems="center">
-          <Grid item>
-            <Typography variant="h4" color="inherit">
-              {count}
-            </Typography>
-          </Grid>
-          {percentage && (
+        <Grid container alignItems="center" justifyContent="space-between">
             <Grid item>
+              <Stack spacing={0.5}>
+              <Typography variant="h4" color="inherit">
+              {doneTasks} / {totalTasks} <Typography display="inline" color="text.secondary" variant="h6">({doneTasksPercentage}%)</Typography>
+            </Typography>
               <Chip
                 variant="combined"
-                color={color}
-                icon={isLoss ? <FallOutlined style={iconSX} /> : <RiseOutlined style={iconSX} />}
-                label={`${percentage}%`}
-                sx={{ ml: 1.25, pl: 1 }}
+                color='warning'
+                label={`Deadline: ${deadline}`}
+                sx={{ mb: 0.5 }}
                 size="small"
               />
+              </Stack>
             </Grid>
-          )}
+            <Grid item>
+            <Tooltip title={`${doneTasksPercentage}%`} arrow>
+            <CircularProgress variant="determinate" value={25} />
+            </Tooltip>
+            <Box width="75px"></Box>
+            </Grid>
         </Grid>
       </Stack>
-      <Box sx={{ pt: 2.25 }}>
-        <Typography variant="caption" color="text.secondary">
-          You made an extra{' '}
-          <Typography variant="caption" sx={{ color: `${color || 'primary'}.main` }}>
-            {extra}
-          </Typography>{' '}
-          this year
+      <Box mt="15px">
+        <Typography     sx={{
+        display: '-webkit-box',
+        overflow: 'hidden',
+        WebkitBoxOrient: 'vertical',
+        WebkitLineClamp: 5,
+    }} variant="caption" color="text.secondary">
+          {description}
         </Typography>
       </Box>
     </MainCard>
