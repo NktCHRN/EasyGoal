@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
@@ -20,6 +21,7 @@ import ProfileTab from './ProfileTab';
 import Avatar from 'components/@extended/Avatar';
 import MainCard from 'components/MainCard';
 import Transitions from 'components/@extended/Transitions';
+import {useAuth} from 'services/auth/AuthProvider'
 
 // assets
 import LogoutOutlined from '@ant-design/icons/LogoutOutlined';
@@ -46,6 +48,10 @@ function a11yProps(index) {
 export default function Profile() {
   const theme = useTheme();
 
+  const navigate = useNavigate();
+
+  const { user, logout } = useAuth();
+
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
   const handleToggle = () => {
@@ -64,6 +70,11 @@ export default function Profile() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  const quit = () => {
+    logout();
+    navigate('/login');
+  }
 
   const iconBackColorOpen = 'grey.100';
 
@@ -85,8 +96,8 @@ export default function Profile() {
       >
         <Stack direction="row" spacing={1.25} alignItems="center" sx={{ p: 0.5 }}>
           <Avatar alt="profile user" src={avatar1} size="sm" />
-          <Typography variant="subtitle1" sx={{ textTransform: 'capitalize' }}>
-            John Doe
+          <Typography variant="subtitle1">
+            {user.name}
           </Typography>
         </Stack>
       </ButtonBase>
@@ -119,13 +130,16 @@ export default function Profile() {
                         <Stack direction="row" spacing={1.25} alignItems="center">
                           <Avatar alt="profile user" src={avatar1} sx={{ width: 32, height: 32 }} />
                           <Stack>
-                            <Typography variant="h5">John Doe</Typography>
+                            <Typography variant="h5">{user.name}</Typography>
+                            <Typography variant="body2" color="text.secondary">
+                              {user.email}
+                            </Typography>
                           </Stack>
                         </Stack>
                       </Grid>
                       <Grid item>
                         <Tooltip title="Logout">
-                          <IconButton size="large" sx={{ color: 'text.primary' }}>
+                          <IconButton size="large" sx={{ color: 'text.primary' }} onClick={quit}>
                             <LogoutOutlined />
                           </IconButton>
                         </Tooltip>

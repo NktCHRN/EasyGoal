@@ -8,14 +8,17 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
 
+  const nameClaim = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname";
+  const emailClaim = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress";
+
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
     if (token) {
       try {
         const decodedToken = jwtDecode(token);
         setUser({
-          name: decodedToken.givenName,
-          email: decodedToken.email,
+          name: decodedToken[nameClaim],
+          email: decodedToken[emailClaim],
         });
         setIsAuthenticated(true);
       } catch (error) {
@@ -26,9 +29,10 @@ export const AuthProvider = ({ children }) => {
 
   const login = (token, refreshToken) => {
     const decodedToken = jwtDecode(token);
+    console.log(decodedToken);
     setUser({
-      name: decodedToken.givenName,
-      email: decodedToken.email,
+      name: decodedToken[nameClaim],
+      email: decodedToken[emailClaim],
     });
     setIsAuthenticated(true);
     localStorage.setItem('accessToken', token);
@@ -45,8 +49,8 @@ export const AuthProvider = ({ children }) => {
   const updateToken = useCallback((token, refreshToken) => {
     const decodedToken = jwtDecode(token);
     setUser({
-      name: decodedToken.givenName,
-      email: decodedToken.email,
+      name: decodedToken[nameClaim],
+      email: decodedToken[emailClaim],
     });
     localStorage.setItem('accessToken', token);
     localStorage.setItem('refreshToken', refreshToken);
