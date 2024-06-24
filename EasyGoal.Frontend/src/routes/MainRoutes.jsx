@@ -5,7 +5,7 @@ import Loadable from 'components/Loadable';
 import Dashboard from 'layout/Dashboard';
 
 const Color = Loadable(lazy(() => import('pages/component-overview/color')));
-const Typography = Loadable(lazy(() => import('pages/component-overview/typography')));
+const Typography = Loadable(lazy(() => import('pages/component-overview/charts')));
 const Shadow = Loadable(lazy(() => import('pages/component-overview/shadows')));
 const Goals = Loadable(lazy(() => import('pages/goals/index')));
 
