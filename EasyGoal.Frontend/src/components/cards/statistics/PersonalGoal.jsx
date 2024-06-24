@@ -18,7 +18,7 @@ import FallOutlined from '@ant-design/icons/FallOutlined';
 
 const iconSX = { fontSize: '0.75rem', color: 'inherit', marginLeft: 0, marginRight: 0 };
 
-export default function AnalyticEcommerce({ name, description, doneTasks, totalTasks, doneTasksPercentage, deadline }) {
+export default function PersonalGoalCard({ name, description, doneTasks, totalTasks, doneTasksPercentage, deadline }) {
   const series = [0];
   const options = {
     chart: {
@@ -85,7 +85,7 @@ export default function AnalyticEcommerce({ name, description, doneTasks, totalT
   );
 }
 
-AnalyticEcommerce.propTypes = {
+PersonalGoalCard.propTypes = {
   color: PropTypes.string,
   title: PropTypes.string,
   count: PropTypes.string,
